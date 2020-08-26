@@ -78,7 +78,7 @@
 @echo.
 @echo  Usage: %BLD_THIS% [help^|svl^|clean^|bootload]
 @echo    help      print these help details
-@echo    svl       compile, link, and create binary (default)
+@echo    svl       create binary for use with SF SVL bootloader (default)
 @echo    clean     delete all intermediate and binary files
 @echo    bootload  load binary using the SF SVL bootloader
 @goto :BLD_END
