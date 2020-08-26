@@ -41,6 +41,6 @@ Launch Visual Studio Code.
 
 Click `File`, `Open Folder...` from the menu. Select the `artemis` folder and click `Select Folder`. You should now see the following in the Explorer view within Visual Studio Code:
 
-![Explorer](doc/explorer.jpg)
+![Explorer](doc/image/explorer.jpg)
 
 ### Configure Visual Studio Code extensions
