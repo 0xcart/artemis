@@ -1,0 +1,20 @@
+{
+  "configurations": [
+    {
+      "name": "gcc-arm",
+      "includePath": [
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/AmbiqSuiteSDK/boards_sfe/artemis_thing_plus/bsp",
+        "${workspaceFolder}/AmbiqSuiteSDK/utils",
+        "${workspaceFolder}/AmbiqSuiteSDK/devices",
+        "${workspaceFolder}/AmbiqSuiteSDK/mcu/apollo3",
+        "${workspaceFolder}/AmbiqSuiteSDK/CMSIS/AmbiqMicro/Include",
+        "${workspaceFolder}/AmbiqSuiteSDK/CMSIS/ARM/Include"
+      ],
+      "defines": [],
+      "compilerPath": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/9 2020-q2-update/bin/arm-none-eabi-gcc.exe",
+      "intelliSenseMode": "gcc-arm"
+    }
+  ],
+  "version": 4
+}

@@ -1,0 +1,35 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Cortex Debug",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "servertype": "jlink",
+      "serverpath": "C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe",
+      "interface": "swd",
+      "swoConfig": {
+        "enabled": true,
+        "cpuFrequency": 48000000,
+        "swoFrequency": 2000000,
+        "source": "probe",
+        "decoders": [
+          {
+            "type": "console",
+            "label": "ITM",
+            "port": 0,
+            "encoding": "ascii"
+          }
+        ]
+      },
+      "device": "AMA3B1KK-KBR",
+      "svdFile": "${workspaceRoot}/AmbiqSuiteSDK/pack/SVD/apollo3.svd",
+      "executable": "${workspaceRoot}/bin/output_svl.axf",
+      "runToMain": true,
+    }
+  ]
+}

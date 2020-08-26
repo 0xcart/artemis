@@ -1,0 +1,46 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "svl",
+      "group": "build",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.bat",
+      "args": ["svl"],
+      "problemMatcher": ["$gcc"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+    },
+    {
+      "label": "clean",
+      "group": "build",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.bat",
+      "args": ["clean"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "clear": false
+      },
+    },
+    {
+      "label": "bootload",
+      "group": "build",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.bat",
+      "args": ["bootload"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false
+      },
+    }
+  ]
+}
