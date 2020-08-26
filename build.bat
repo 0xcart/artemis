@@ -23,18 +23,23 @@
 @setlocal enableextensions
 @setlocal enabledelayedexpansion
 
-@set BLD_THIS=%~nx0
 @set BLD_BOARD=artemis_thing_plus
 @set BLD_PART=APOLLO3
 @set BLD_MCU=apollo3
 @set BLD_CPU=cortex-m4
 @set BLD_FPU=fpv4-sp-d16
 @set BLD_FABI=hard
+@set BLD_THIS=%~nx0
+@set BLD_PATH=%~dp0
+@set BLD_PATH=!BLD_PATH:~,-1!
 @set BLD_BINPATH=bin
 @set BLD_SRCPATH=src
 @set BLD_SDKPATH=AmbiqSuiteSDK
 @set BLD_BOARDPATH=%BLD_SDKPATH%/boards_sfe/%BLD_BOARD%
 @set BLD_TEMPLATEPATH=%BLD_SDKPATH%/boards_sfe/common/tools_sfe/templates
+@set BLD_ARTEMISSVL=%BLD_PATH:\=/%/%BLD_SDKPATH%/boards_sfe/common/tools_sfe/artemis/windows/artemis_svl
+@set BLD_BAUD=921600
+@set BLD_PORT=COM4
 @set BLD_TOOLCHAIN=arm-none-eabi
 @set BLD_CC=%BLD_TOOLCHAIN%-gcc
 @set BLD_LD=%BLD_TOOLCHAIN%-ld
@@ -62,14 +67,14 @@
 @goto :BLD_END
 
 :BLD_ARGUMENTS
-@if [%1] equ [] goto :BLD_SVL
+@if [%1] equ [] goto :BLD_SVLBIN
 @if "%1" equ "help" goto :BLD_HELP
-@if "%1" equ "svl" goto :BLD_SVL
+@if "%1" equ "svl" goto :BLD_SVLBIN
 @if "%1" equ "clean" goto :BLD_CLEAN
 @if "%1" equ "bootload" goto :BLD_BOOTLOAD
-@goto :BLD_INVALID
+@goto :BLD_ARG_INVALID
 
-:BLD_INVALID
+:BLD_ARG_INVALID
 @echo.
 @echo  *** INVALID ARGUMENT ***
 @goto :BLD_HELP
@@ -83,7 +88,7 @@
 @echo    bootload  load binary using the SF SVL bootloader
 @goto :BLD_END
 
-:BLD_SVL
+:BLD_SVLBIN
 @echo.
 @echo  Making    '%BLD_BINPATH%' directory
 @if not exist "%BLD_BINPATH%" mkdir "%BLD_BINPATH%"
@@ -110,7 +115,7 @@
 @echo.
 @echo  *** 'mkdir' FAILED ***
 @echo.
-@echo Could not create '%BLD_BINPATH%' directory
+@echo  Could not create '%BLD_BINPATH%' directory
 @goto :BLD_END
 
 :BLD_FAILURE
@@ -134,10 +139,11 @@
 @echo.
 @echo  *** 'rmdir' FAILED ***
 @echo.
-@echo Could not remove '%BLD_BINPATH%' directory
+@echo  Could not remove '%BLD_BINPATH%' directory
 @goto :BLD_END
 
 :BLD_BOOTLOAD
+%BLD_ARTEMISSVL% -v %BLD_PORT% -b %BLD_BAUD% -f %BLD_BINPATH%/%BLD_OUTPUT%_svl.bin
 @goto :BLD_END
 
 :BLD_END
