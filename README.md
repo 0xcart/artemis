@@ -2,11 +2,11 @@
 
 Visual Studio Code development environment for [SparkFun Artemis](https://www.sparkfun.com/artemis) based boards.
 
-This project provides a starting template to build, load, and debug Artemis based boards using Visual Studio Code in conjunction with a Segger J-Link device. This project natively supports the Windows 10 platform and does **not** rely on Windows Subsystem for Linux (WSL), MinGW, etc.)
+This project provides a starting template to develop, build, load, and debug SparkFun Artemis based boards using Visual Studio Code in conjunction with a Segger J-Link device. This project natively supports the Windows 10 platform and does ***not*** rely on Windows Subsystem for Linux (WSL), MinGW, etc.)
 
 ## Dependencies
 
-The latest version of each tool/extension should be used unless otherwise noted. During installation, if the option is available to add a given tool to the PATH environment variable, please do so. This is very important for ARM GCC.
+The latest version of each tool/extension should be used unless otherwise noted. During installation, if the option is available to add a given tool to the PATH environment variable, please do so. This is very important for the GNU Arm Embedded Toolchain.
 
 The following tools are required to make use of this repository:
 
@@ -41,7 +41,7 @@ This repository includes the SparkFun copy of the [AmbiqSuite SDK](https://githu
 
 Launch Visual Studio Code.
 
-Click `File`, `Open Folder...` from the menu. Select the `artemis` folder and click `Select Folder`. You should now see the following in the `Explorer` view within Visual Studio Code:
+Click `File`, `Open Folder...` from the main menu. Select the `artemis` folder and click `Select Folder`. You should now see the following in the `Explorer` view within Visual Studio Code:
 
 ![Explorer](doc/image/explorer.jpg)
 
@@ -75,23 +75,23 @@ Several parameters in build.bat must be verified and/or updated.
 
 The first set of parameters are associated with your Artemis board. Please update these parameters to match your boards attributes. The default parameters found in build.bat are for the Artemis Thing Plus. If you're using this board then no modification should be necessary.
 
-> BLD_BOARD=artemis_thing_plus
-> BLD_PART=APOLLO3
-> BLD_MCU=apollo3
-> BLD_CPU=cortex-m4
-> BLD_FPU=fpv4-sp-d16
-> BLD_FABI=hard
+* BLD_BOARD=artemis_thing_plus
+* BLD_PART=APOLLO3
+* BLD_MCU=apollo3
+* BLD_CPU=cortex-m4
+* BLD_FPU=fpv4-sp-d16
+* BLD_FABI=hard
 
 The second set of parameters are associated with communications to your board. Please update these as necessary. Note, a baud rate of 921600bps is correct for the SparkFun Variable Loader (SVL).
 
-> BLD_BAUD=921600
-> BLD_PORT=COM4
+* BLD_BAUD=921600
+* BLD_PORT=COM4
 
 In the future, when you're ready to add additional source files, libraries, etc., you'll need to update the following:
 
-> BLD_INCLUDE=-Imy/include/path
-> BLD_SOURCE=src/mysrc.c
-> BLD_LIBRARY=mylib.a
+* BLD_INCLUDE=-Imy/include/path
+* BLD_SOURCE=src/mysrc.c
+* BLD_LIBRARY=mylib.a
 
 ## Build, Load, and Debug
 
@@ -117,15 +117,15 @@ Creating  'bin/output_svl.bin'
 
 A `bin` directory is created containing the following list of output files:
 
-> am_devices_led.o
-> am_util_delay.o
-> am_util_stdio.o
-> main.o
-> output_svl.axf
-> output_svl.bin
-> output_svl.lst
-> output_svl.map
-> startup_gcc.o
+* am_devices_led.o
+* am_util_delay.o
+* am_util_stdio.o
+* main.o
+* output_svl.axf
+* output_svl.bin
+* output_svl.lst
+* output_svl.map
+* startup_gcc.o
 
 To load `output_svl.bin` onto your Artemis board press `Ctrl + Shift + B` and select `bootload`. This executes the `artemis_svl.exe` process provided by SparkFun and loads the binary via the SparkFun Variable Loader (SVL). You should see the following printed to the console:
 
