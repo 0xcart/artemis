@@ -63,13 +63,71 @@ Click on `Edit in settings.json` which will open the `settings.json` document. U
 }
 ```
 
-### Update c_cpp_properties.json settings in the .vscode folder
+### Update the c_cpp_properties.json settings in the .vscode folder
 
 Update the `compilerPath` value to match your system configuration.
 
-### Update launch.json settings in the .vscode folder
+```json
+{
+  "version": 4,
+  "configurations": [
+    {
+      "name": "gcc-arm",
+      "includePath": [
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/AmbiqSuiteSDK/boards_sfe/artemis_thing_plus/bsp",
+        "${workspaceFolder}/AmbiqSuiteSDK/utils",
+        "${workspaceFolder}/AmbiqSuiteSDK/devices",
+        "${workspaceFolder}/AmbiqSuiteSDK/mcu/apollo3",
+        "${workspaceFolder}/AmbiqSuiteSDK/CMSIS/AmbiqMicro/Include",
+        "${workspaceFolder}/AmbiqSuiteSDK/CMSIS/ARM/Include"
+      ],
+      "defines": [],
+      "compilerPath": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/9 2020-q2-update/bin/arm-none-eabi-gcc.exe",
+      "intelliSenseMode": "gcc-arm"
+    }
+  ]
+}
+```
+
+### Update the launch.json settings in the .vscode folder
 
 Update the `serverpath` value to match your system configuration. Also update the `cpuFrequency`, `swoFrequency`, and `device` values to match your Artemis board.
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Cortex Debug",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "servertype": "jlink",
+      "serverpath": "C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe",
+      "interface": "swd",
+      "swoConfig": {
+        "enabled": true,
+        "cpuFrequency": 48000000,
+        "swoFrequency": 2000000,
+        "source": "probe",
+        "decoders": [
+          {
+            "type": "console",
+            "label": "ITM",
+            "port": 0,
+            "encoding": "ascii"
+          }
+        ]
+      },
+      "device": "AMA3B1KK-KBR",
+      "svdFile": "${workspaceRoot}/AmbiqSuiteSDK/pack/SVD/apollo3.svd",
+      "executable": "${workspaceRoot}/bin/output_svl.axf",
+      "runToMain": true,
+    }
+  ]
+}
+```
 
 ### Update build.bat
 
