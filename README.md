@@ -127,10 +127,25 @@ A `bin` directory is created containing the following list of output files:
 * output_svl.map
 * startup_gcc.o
 
-To load `output_svl.bin` onto your Artemis board press `Ctrl + Shift + B` and select `bootload`. This executes the `artemis_svl.exe` process provided by SparkFun and loads the binary via the SparkFun Variable Loader (SVL). You should see the following printed to the console:
+To load `output_svl.bin` onto your Artemis board press `Ctrl + Shift + B` and select `bootload`. This executes the `artemis_svl.exe` process provided by SparkFun and loads the binary via the SparkFun Variable Loader (SVL). You should see the following (or similar) printed to the console:
 
 ```shell
-TODO
+Artemis SVL Bootloader
+
+phase:  setup
+        cleared startup blip
+        Got SVL Bootloader Version: 3
+        Sending 'enter bootloader' command
+
+phase:  bootload
+        have 4484 bytes to send in 3 frames
+        sending frame #1, length: 2048
+        sending frame #2, length: 2048
+        sending frame #3, length: 388
+
+        Upload complete
+
+        Nominal bootload bps: 36222.77
 ```
 
 Press `F5`. This will launch the Segger J-Link GDB server. TODO
