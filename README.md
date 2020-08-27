@@ -1,8 +1,10 @@
 # artemis
 
-Visual Studio Code development environment for [SparkFun Artemis](https://www.sparkfun.com/artemis) based boards.
+A Visual Studio Code development environment for [SparkFun Artemis](https://www.sparkfun.com/artemis) based boards.
 
-This project provides a starting template to develop, build, load, and debug SparkFun Artemis based boards using Visual Studio Code in conjunction with a Segger J-Link device. This project natively supports the Windows 10 platform and does ***not*** rely on Windows Subsystem for Linux (WSL), MinGW, etc.
+This project provides a starting template to develop, build, load, and debug SparkFun Artemis based boards using Visual Studio Code in conjunction with Segger J-Link. This project natively supports the Windows 10 platform and does ***not*** rely on Windows Subsystem for Linux (WSL), MinGW, etc. The batch file, build.bat, which supports building and loading is modeled after the Makefile template provided in the [SparkFun Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository.
+
+While the current configuration is setup to support Segger J-Link, it can be configured to support OpenOCD, etc.
 
 ## Dependencies
 
@@ -35,7 +37,7 @@ cd artemis
 git submodule update --init --recursive
 ```
 
-This repository includes the SparkFun copy of the [AmbiqSuite SDK](https://github.com/sparkfun/AmbiqSuiteSDK) as a git submodule. In turn, this copy of the SDK includes the SparkFun [Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository as a git submodule. By using the --init --recursive flags both submodules will be initialized and updated correctly.
+This repository includes the SparkFun copy of the [AmbiqSuite SDK](https://github.com/sparkfun/AmbiqSuiteSDK) as a git submodule. In turn, this copy of the SDK includes the [SparkFun Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository as a git submodule. By using the --init --recursive flags both submodules will be initialized and updated correctly.
 
 ### Open the project
 
@@ -93,7 +95,7 @@ In the future, when you're ready to add additional source files, libraries, etc.
 * BLD_SOURCE=src/mysrc.c
 * BLD_LIBRARY=mylib.a
 
-## Build, Load, and Debug
+## Build, Load, Debug, and Clean
 
 Press `F1`. This will display a popup menu listing all commands. Select `Tasks: Run Build Task` from the list of tasks. Alternatively you can press `Ctrl + Shift + B` to reach the same set of build tasks.
 
@@ -148,7 +150,7 @@ phase:  bootload
         Nominal bootload bps: 36222.77
 ```
 
-Press `F5`. This will launch the Segger J-Link GDB server.
+To begin debugging press `F5`. This will launch the Segger J-Link GDB server.
 
 TODO
 
