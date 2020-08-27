@@ -4,7 +4,7 @@ A Visual Studio Code development environment for [SparkFun Artemis](https://www.
 
 This project provides a starting template to develop, build, load, and debug SparkFun Artemis based boards using Visual Studio Code in conjunction with Segger J-Link. This project natively supports the Windows 10 platform and does ***not*** rely on Windows Subsystem for Linux (WSL), MinGW, etc. The batch file, build.bat, which supports building and loading is modeled after the Makefile template provided in the [SparkFun Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository.
 
-While the current configuration is setup to support Segger J-Link, it can be configured to support OpenOCD, etc.
+While the current configuration supports Segger J-Link, it can be configured to support OpenOCD, etc.
 
 ## Dependencies
 
@@ -155,6 +155,8 @@ In the future, when you're ready to add additional source files, libraries, etc.
 
 ## Build, Load, Debug, and Clean
 
+### Build
+
 Press `F1`. This will display a popup menu listing all commands. Select `Tasks: Run Build Task` from the list of tasks. Alternatively you can press `Ctrl + Shift + B` to reach the same set of build tasks.
 
 ![Build](doc/image/build.jpg)
@@ -187,6 +189,8 @@ A `bin` directory is created containing the following list of output files:
 * output_svl.map
 * startup_gcc.o
 
+### Load
+
 To load `output_svl.bin` onto your Artemis board press `Ctrl + Shift + B` and select `bootload`. This executes the `artemis_svl.exe` process provided by SparkFun and loads the binary via the SparkFun Variable Loader (SVL). You should see the following (or similar) printed to the console:
 
 ```shell
@@ -208,9 +212,69 @@ phase:  bootload
         Nominal bootload bps: 36222.77
 ```
 
-To begin debugging press `F5`. This will launch the Segger J-Link GDB server.
+### Debug
 
-TODO
+To begin debugging press `F5`. This will launch the Segger J-Link GDB server. Your application will stop at a breakpoint in `main`:
+
+![main()](doc/image/main.jpg)
+
+You should see the following printed to the `DEBUG CONSOLE` at the bottom of Visual Studio Code:
+
+```shell
+Please check OUTPUT tab (Adapter Output) for output from C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe
+Launching server: "C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe" "-if" "swd" "-port" "50000" "-swoport" "50001" "-telnetport" "50002" "-device" "AMA3B1KK-KBR"
+Launching GDB: "C:\Program Files (x86)\GNU Arm Embedded Toolchain\9 2020-q2-update\bin\arm-none-eabi-gdb.exe" "-q" "--interpreter=mi2"
+undefinedC:\Program Files (x86)\GNU Arm Embedded Toolchain\9 2020-q2-update\bin\arm-none-eabi-gdb.exe: warning: Couldn't determine a path for the index cache directory.
+Reading symbols from C:\Solutions\artemis/bin/output_svl.axf...
+main () at src/main.c:47
+47      am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
+Not implemented stop reason (assuming exception): undefined
+Resetting target
+Resetting target
+SWO enabled successfully.
+
+Temporary breakpoint 1, main () at src/main.c:47
+47      am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
+```
+
+At the top of Visual Studio Code you'll find a popup dialog with Debug buttons that include `Continue`, `Step Over`, `Step Into`, `Step Out`, etc.:
+
+![Debug](doc/image/debug.jpg)
+
+Click the `Continue` button.
+
+At the bottom of Visual Studio Code you'll find several output consoles:
+
+![Output](doc/image/output.jpg)
+
+Click on the `OUTPUT` tab. By default `Adapter Output` is selected in the drop-down menu on the right:
+
+![Adapter](doc/image/adapter.jpg)
+
+You should see the following (or similar) printed to the `OUTPUT`:
+
+```shell
+...
+Reading register (d11 = 0x       0)
+Reading register (d12 = 0x       0)
+Reading register (d13 = 0x       0)
+Reading register (d14 = 0x       0)
+Reading register (d15 = 0x       0)
+```
+
+In the drop down menu on the right (the current selection is `Adapter Output`) select `SWO: ITM [port: 0, type: console]`:
+
+![SWO](doc/image/swo.jpg)
+
+You should see the following (or similar) printed to the `OUTPUT`:
+
+```shell
+[2020-08-27T19:45:44.753Z]   Test SWO output
+```
+
+This verifies functions like `am_util_stdio_printf();` are working properly (see src/main.c:57).
+
+### Clean
 
 To clean the project, again bring up the build task by pressing `Ctrl + Shift + B` and select `clean`. You should see the following printed to the console:
 

@@ -54,7 +54,7 @@ main(void)
     am_bsp_low_power_init();
 
     am_bsp_itm_printf_enable();
-    am_bsp_itm_string_print("Test...");
+    am_util_stdio_printf("Test SWO output\n");
 
     // Set up BSP leds
 #ifdef AM_BSP_NUM_LEDS
