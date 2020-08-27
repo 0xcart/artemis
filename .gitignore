@@ -6,6 +6,7 @@
 *.ko
 *.obj
 *.elf
+*.axf
 
 # Linker output
 *.ilk
@@ -35,7 +36,6 @@
 *.i*86
 *.x86_64
 *.hex
-*.axf
 *.bin
 
 # Debug files
