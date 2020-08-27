@@ -2,6 +2,8 @@
 
 Visual Studio Code development environment for [SparkFun Artemis](https://www.sparkfun.com/artemis) based boards.
 
+This project provides a starting template to build, load, and debug Artemis based boards using Visual Studio Code in conjunction with a Segger J-Link device. This project natively supports the Windows 10 platform and does **not** rely on Windows Subsystem for Linux (WSL), MinGW, etc.)
+
 ## Dependencies
 
 The latest version of each tool/extension should be used unless otherwise noted. During installation, if the option is available to add a given tool to the PATH environment variable, please do so. This is very important for ARM GCC.
@@ -28,12 +30,12 @@ The following Visual Studio Code extensions are recommended:
 ### Clone this repository and initialize its submodules
 
 ```shell
-  git clone https://github.com/0xcart/artemis.git
-  cd artemis
-  git submodule update --init --recursive
+git clone https://github.com/0xcart/artemis.git
+cd artemis
+git submodule update --init --recursive
 ```
 
-  This repository includes the SparkFun copy of the [AmbiqSuite SDK](https://github.com/sparkfun/AmbiqSuiteSDK) as a git submodule. In turn, this copy of the SDK includes the SparkFun [Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository as a git submodule. By using the --init --recursive flags both submodules will be initialized and updated correctly.
+This repository includes the SparkFun copy of the [AmbiqSuite SDK](https://github.com/sparkfun/AmbiqSuiteSDK) as a git submodule. In turn, this copy of the SDK includes the SparkFun [Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository as a git submodule. By using the --init --recursive flags both submodules will be initialized and updated correctly.
 
 ### Open the project
 
@@ -61,11 +63,80 @@ Click on `Edit in settings.json` which will open the `settings.json` document. U
 
 ### Update c_cpp_properties.json settings in the .vscode folder
 
-Update the `"compilerPath"` value to match your system configuration.
+Update the `compilerPath` value to match your system configuration.
 
 ### Update launch.json settings in the .vscode folder
 
-Update the `"serverpath"` value to match your system configuration. Also update the `"cpuFrequency"`, `"swoFrequency"`, and `"device"` values to match your Artemis board.
+Update the `serverpath` value to match your system configuration. Also update the `cpuFrequency`, `swoFrequency`, and `device` values to match your Artemis board.
 
-## Build, Run, and Debug
+### Update build.bat
 
+Several parameters in build.bat must be verified and/or updated.
+
+The first set of parameters are associated with your Artemis board. Please update these parameters to match your boards attributes. The default parameters found in build.bat are for the Artemis Thing Plus. If you're using this board then no modification should be necessary.
+
+> BLD_BOARD=artemis_thing_plus
+> BLD_PART=APOLLO3
+> BLD_MCU=apollo3
+> BLD_CPU=cortex-m4
+> BLD_FPU=fpv4-sp-d16
+> BLD_FABI=hard
+
+The second set of parameters are associated with communications to your board. Please update these as necessary. Note, a baud rate of 921600bps is correct for the SparkFun Variable Loader (SVL).
+
+> BLD_BAUD=921600
+> BLD_PORT=COM4
+
+In the future, when you're ready to add additional source files, libraries, etc., you'll need to update the following:
+
+> BLD_INCLUDE=-Imy/include/path
+> BLD_SOURCE=src/mysrc.c
+> BLD_LIBRARY=mylib.a
+
+## Build, Load, and Debug
+
+Press `F1`. This will display a popup menu listing all commands. Select `Tasks: Run Build Task` from the list of tasks. Alternatively you can press `Ctrl + Shift + B` to reach the same set of build tasks.
+
+![Build](doc/image/build.jpg)
+
+To build the project select `svl binary`. You should see the following printed to the console:
+
+```shell
+Making    'bin' directory
+Compiling 'src/main.c'
+Compiling 'AmbiqSuiteSDK/boards_sfe/common/tools_sfe/templates/startup_gcc.c'
+Compiling 'AmbiqSuiteSDK/devices/am_devices_led.c'
+Compiling 'AmbiqSuiteSDK/utils/am_util_delay.c'
+Compiling 'AmbiqSuiteSDK/utils/am_util_stdio.c'
+Linking   'bin/output_svl.axf' with script 'AmbiqSuiteSDK/boards_sfe/common/tools_sfe/templates/asb_svl_linker.ld'
+Creating  'bin/output_svl.lst'
+Creating  'bin/output_svl.bin'
+
+=== BUILD SUCCESSFUL ===
+```
+
+A `bin` directory is created containing the following list of output files:
+
+> am_devices_led.o
+> am_util_delay.o
+> am_util_stdio.o
+> main.o
+> output_svl.axf
+> output_svl.bin
+> output_svl.lst
+> output_svl.map
+> startup_gcc.o
+
+To load `output_svl.bin` onto your Artemis board press `Ctrl + Shift + B` and select `bootload`. This executes the `artemis_svl.exe` process provided by SparkFun and loads the binary via the SparkFun Variable Loader (SVL). You should see the following printed to the console:
+
+```shell
+TODO
+```
+
+Press `F5`. This will launch the Segger J-Link GDB server. TODO
+
+To clean the project, again bring up the build task by pressing `Ctrl + Shift + B` and select `clean`. You should see the following printed to the console:
+
+```shell
+Removing 'bin' directory
+```
