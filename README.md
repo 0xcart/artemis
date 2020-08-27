@@ -6,6 +6,8 @@ This project provides a starting template to develop, build, load, and debug Spa
 
 While the current configuration supports Segger J-Link, it can be configured to support OpenOCD, etc.
 
+The SparkFun Artemis [forum](https://forum.sparkfun.com/viewforum.php?f=167) is highly recommended for information and support.
+
 ## Dependencies
 
 The latest version of each tool/extension should be used unless otherwise noted. During installation, if the option is available to add a given tool to the system PATH environment variable, please do so. This is very important for the GNU Arm Embedded Toolchain.
