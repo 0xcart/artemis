@@ -2,7 +2,7 @@
 
 Visual Studio Code development environment for [SparkFun Artemis](https://www.sparkfun.com/artemis) based boards.
 
-This project provides a starting template to develop, build, load, and debug SparkFun Artemis based boards using Visual Studio Code in conjunction with a Segger J-Link device. This project natively supports the Windows 10 platform and does ***not*** rely on Windows Subsystem for Linux (WSL), MinGW, etc.)
+This project provides a starting template to develop, build, load, and debug SparkFun Artemis based boards using Visual Studio Code in conjunction with a Segger J-Link device. This project natively supports the Windows 10 platform and does ***not*** rely on Windows Subsystem for Linux (WSL), MinGW, etc.
 
 ## Dependencies
 
@@ -148,7 +148,9 @@ phase:  bootload
         Nominal bootload bps: 36222.77
 ```
 
-Press `F5`. This will launch the Segger J-Link GDB server. TODO
+Press `F5`. This will launch the Segger J-Link GDB server.
+
+TODO
 
 To clean the project, again bring up the build task by pressing `Ctrl + Shift + B` and select `clean`. You should see the following printed to the console:
 
