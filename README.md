@@ -272,7 +272,7 @@ You should see the following (or similar) printed to the `OUTPUT` tab:
 [2020-08-27T19:45:44.753Z]   Test SWO output
 ```
 
-This verifies functions like `am_util_stdio_printf();` are working properly (see src/main.c:57).
+This verifies functions like `am_util_stdio_printf()` are working properly (see src/main.c:57).
 
 ### Clean
 
