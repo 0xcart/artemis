@@ -2,13 +2,13 @@
 
 A Visual Studio Code development environment for [SparkFun Artemis](https://www.sparkfun.com/artemis) based boards.
 
-This project provides a starting template to develop, build, load, and debug SparkFun Artemis based boards using Visual Studio Code in conjunction with Segger J-Link. This project natively supports the Windows 10 platform and does ***not*** rely on Windows Subsystem for Linux (WSL), MinGW, etc. The batch file, build.bat, which supports building and loading is modeled after the Makefile template provided in the [SparkFun Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository.
+This project provides a starting template to develop, build, load, and debug SparkFun Artemis based boards using Visual Studio Code in conjunction with Segger J-Link. This project natively supports the Windows 10 platform and does ***not*** rely on Windows Subsystem for Linux (WSL), MinGW, etc. The batch file, build.bat, which supports building and loading from Windows is modeled after the Makefile template provided in the [SparkFun Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository.
 
 While the current configuration supports Segger J-Link, it can be configured to support OpenOCD, etc.
 
 ## Dependencies
 
-The latest version of each tool/extension should be used unless otherwise noted. During installation, if the option is available to add a given tool to the PATH environment variable, please do so. This is very important for the GNU Arm Embedded Toolchain.
+The latest version of each tool/extension should be used unless otherwise noted. During installation, if the option is available to add a given tool to the system PATH environment variable, please do so. This is very important for the GNU Arm Embedded Toolchain.
 
 The following tools are required to make use of this repository:
 
@@ -37,7 +37,7 @@ cd artemis
 git submodule update --init --recursive
 ```
 
-This repository includes the SparkFun copy of the [AmbiqSuite SDK](https://github.com/sparkfun/AmbiqSuiteSDK) as a git submodule. In turn, this copy of the SDK includes the [SparkFun Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository as a git submodule. By using the --init --recursive flags both submodules will be initialized and updated correctly.
+This repository includes the SparkFun copy of the [AmbiqSuite SDK](https://github.com/sparkfun/AmbiqSuiteSDK) as a git submodule. In turn, this copy of the SDK includes the [SparkFun Board Support Package](https://github.com/sparkfun/SparkFun_Apollo3_AmbiqSuite_BSPs) repository as a git submodule. By using the `--init` and `--recursive` flags both submodules will be initialized and updated correctly.
 
 ### Open the project
 
@@ -92,7 +92,7 @@ Update the `compilerPath` value to match your system configuration.
 
 ### Update the launch.json settings in the .vscode folder
 
-Update the `serverpath` value to match your system configuration. Also update the `cpuFrequency`, `swoFrequency`, and `device` values to match your Artemis board.
+Update the `serverpath` value to match your system configuration. Also update the `cpuFrequency`, `swoFrequency`, and `device` values to match your Artemis board. For most SparkFun Artemis boards the default values should be correct.
 
 ```json
 {
@@ -133,7 +133,7 @@ Update the `serverpath` value to match your system configuration. Also update th
 
 Several parameters in build.bat must be verified and/or updated.
 
-The first set of parameters are associated with your Artemis board. Please update these parameters to match your boards attributes. The default parameters found in build.bat are for the Artemis Thing Plus. If you're using this board then no modification should be necessary.
+The first set of parameters are associated with your Artemis board. Please update these parameters to match your boards attributes. The default parameters found in build.bat are for the Artemis Thing Plus. If you're using this board then no modifications should be necessary.
 
 * BLD_BOARD=artemis_thing_plus
 * BLD_PART=APOLLO3
@@ -214,11 +214,11 @@ phase:  bootload
 
 ### Debug
 
-To begin debugging press `F5`. This will launch the Segger J-Link GDB server. Your application will stop at a breakpoint in `main`:
+To begin debugging press `F5`. This will launch the Segger J-Link GDB server. Your application will stop at a breakpoint in `main()`:
 
 ![main()](doc/image/main.jpg)
 
-You should see the following printed to the `DEBUG CONSOLE` at the bottom of Visual Studio Code:
+You should see the following printed to the `DEBUG CONSOLE` tab at the bottom of Visual Studio Code:
 
 ```shell
 Please check OUTPUT tab (Adapter Output) for output from C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe
@@ -247,11 +247,11 @@ At the bottom of Visual Studio Code you'll find several output consoles:
 
 ![Output](doc/image/output.jpg)
 
-Click on the `OUTPUT` tab. By default `Adapter Output` is selected in the drop-down menu on the right:
+Click on the `OUTPUT` tab. By default, `Adapter Output` is selected in the drop-down menu on the right:
 
 ![Adapter](doc/image/adapter.jpg)
 
-You should see the following (or similar) printed to the `OUTPUT`:
+You should see the following (or similar) printed to the `OUTPUT` tab:
 
 ```shell
 ...
@@ -262,11 +262,11 @@ Reading register (d14 = 0x       0)
 Reading register (d15 = 0x       0)
 ```
 
-In the drop down menu on the right (the current selection is `Adapter Output`) select `SWO: ITM [port: 0, type: console]`:
+In the drop down menu on the right (the selection is currently `Adapter Output`) select `SWO: ITM [port: 0, type: console]`:
 
 ![SWO](doc/image/swo.jpg)
 
-You should see the following (or similar) printed to the `OUTPUT`:
+You should see the following (or similar) printed to the `OUTPUT` tab:
 
 ```shell
 [2020-08-27T19:45:44.753Z]   Test SWO output
