@@ -135,7 +135,7 @@ Update the `serverpath` value to match your system configuration. Also update th
 
 Several parameters in build.bat must be verified and/or updated.
 
-The first set of parameters are associated with your Artemis board. Please update these parameters to match your boards attributes. The default parameters found in build.bat are for the Artemis Thing Plus. If you're using this board then no modifications should be necessary.
+The first set of parameters are associated with your Artemis board. Please update the values for these parameters to match your boards attributes. The default values found in build.bat are for the Artemis Thing Plus. If you're using this board then no modifications should be necessary. The value for `BLD_BOARD` should match one of the folders found in `artemis/AmbiqSuiteSDK/boards_sfe`.
 
 * BLD_BOARD=artemis_thing_plus
 * BLD_PART=APOLLO3
@@ -144,22 +144,22 @@ The first set of parameters are associated with your Artemis board. Please updat
 * BLD_FPU=fpv4-sp-d16
 * BLD_FABI=hard
 
-The second set of parameters are associated with communications to your board. Please update these as necessary. Note, a baud rate of 921600bps is correct for the SparkFun Variable Loader (SVL).
+The second set of parameters are associated with communications to your board. Please update these values as necessary. A baud rate of 921600bps is correct for the SparkFun Variable Loader (SVL).
 
 * BLD_BAUD=921600
 * BLD_PORT=COM4
 
-In the future, when you're ready to add additional source files, libraries, etc., you'll need to update the following:
+In the future, when you're ready to add additional source files, libraries, etc., you'll need to update the following parameters:
 
-* BLD_INCLUDE=-Imy/include/path
-* BLD_SOURCE=src/mysrc.c
-* BLD_LIBRARY=mylib.a
+* BLD_INCLUDE=
+* BLD_SOURCE=
+* BLD_LIBRARY=
 
 ## Build, Load, Debug, and Clean
 
 ### Build
 
-Press `F1`. This will display a popup menu listing all commands. Select `Tasks: Run Build Task` from the list of tasks. Alternatively you can press `Ctrl + Shift + B` to reach the same set of build tasks.
+Press `F1`. This will display a popup menu listing all commands. Select `Tasks: Run Build Task` from the list of commands to display the build task. Alternatively you can press `Ctrl + Shift + B` to reach the same build task.
 
 ![Build](doc/image/build.jpg)
 
