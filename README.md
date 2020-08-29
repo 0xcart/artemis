@@ -271,7 +271,7 @@ In the drop down menu on the right (the selection is currently `Adapter Output`)
 You should see the following (or similar) printed to the `OUTPUT` tab:
 
 ```shell
-[2020-08-27T19:45:44.753Z]   Test SWO output
+[2020-08-27T19:45:44.753Z]   Test SWO
 ```
 
 This verifies functions like `am_util_stdio_printf()` are working properly (see src/main.c:57).

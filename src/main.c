@@ -2,8 +2,7 @@
 //
 //! @file main.c
 //!
-//! @brief A simple LED blinking example.
-//!
+//! @brief A simple LED blinking example
 //
 //*****************************************************************************
 
@@ -29,7 +28,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "am_mcu_apollo.h"
 #include "am_bsp.h"
 #include "am_util.h"
 
@@ -40,8 +38,7 @@ SOFTWARE.
 // Main
 //
 //*****************************************************************************
-int
-main(void)
+int main(void)
 {
     // Set the clock frequency.
     am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
@@ -53,8 +50,9 @@ main(void)
     // Configure the board for low power operation.
     am_bsp_low_power_init();
 
+    // Enable Single Wire Output (SWO) using Instrumentation Trace Macrocell (ITM)
     am_bsp_itm_printf_enable();
-    am_util_stdio_printf("Test SWO output\n");
+    am_util_stdio_printf("Test SWO\n");
 
     // Set up BSP leds
 #ifdef AM_BSP_NUM_LEDS

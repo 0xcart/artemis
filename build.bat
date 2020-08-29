@@ -17,8 +17,6 @@
 @rem IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 @rem CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-@rem Usage: build.bat [help|svl|clean|bootload]
-
 @echo off
 @setlocal enableextensions
 @setlocal enabledelayedexpansion
