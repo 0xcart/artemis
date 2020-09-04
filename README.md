@@ -167,8 +167,12 @@ To build the project select `svl binary`. You should see the following printed t
 
 ```shell
 Making    'bin' directory
-Compiling 'src/main.c'
-Compiling 'AmbiqSuiteSDK/boards_sfe/common/tools_sfe/templates/startup_gcc.c'
+Compiling 'src/artemis_startup.c'
+Compiling 'src/artemis_main.c'
+Compiling 'src/artemis_cpu.c'
+Compiling 'src/artemis_time.c'
+Compiling 'src/artemis_scheduler.c'
+Compiling 'src/artemis_led.c'
 Compiling 'AmbiqSuiteSDK/devices/am_devices_led.c'
 Compiling 'AmbiqSuiteSDK/utils/am_util_delay.c'
 Compiling 'AmbiqSuiteSDK/utils/am_util_stdio.c'
@@ -184,12 +188,16 @@ A `bin` directory is created containing the following list of output files:
 * am_devices_led.o
 * am_util_delay.o
 * am_util_stdio.o
-* main.o
+* artemis_cpu.o
+* artemis_led.o
+* artemis_main.o
+* artemis_scheduler.o
+* artemis_startup.o
+* artemis_time.o
 * output_svl.axf
 * output_svl.bin
 * output_svl.lst
 * output_svl.map
-* startup_gcc.o
 
 ### Load
 
@@ -204,14 +212,16 @@ phase:  setup
         Sending 'enter bootloader' command
 
 phase:  bootload
-        have 4484 bytes to send in 3 frames
+        have 9608 bytes to send in 5 frames
         sending frame #1, length: 2048
         sending frame #2, length: 2048
-        sending frame #3, length: 388
+        sending frame #3, length: 2048
+        sending frame #4, length: 2048
+        sending frame #5, length: 1416
 
         Upload complete
 
-        Nominal bootload bps: 36222.77
+        Nominal bootload bps: 37931.53
 ```
 
 ### Debug
@@ -228,15 +238,15 @@ Launching server: "C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe" "-i
 Launching GDB: "C:\Program Files (x86)\GNU Arm Embedded Toolchain\9 2020-q2-update\bin\arm-none-eabi-gdb.exe" "-q" "--interpreter=mi2"
 undefinedC:\Program Files (x86)\GNU Arm Embedded Toolchain\9 2020-q2-update\bin\arm-none-eabi-gdb.exe: warning: Couldn't determine a path for the index cache directory.
 Reading symbols from C:\Solutions\artemis/bin/output_svl.axf...
-main () at src/main.c:47
-47      am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
+main () at src/artemis_main.c:17
+17	    am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
 Not implemented stop reason (assuming exception): undefined
 Resetting target
 Resetting target
 SWO enabled successfully.
 
-Temporary breakpoint 1, main () at src/main.c:47
-47      am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
+Temporary breakpoint 1, main () at src/artemis_main.c:17
+17	    am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
 ```
 
 At the top of Visual Studio Code you'll find a popup dialog with Debug buttons that include `Continue`, `Step Over`, `Step Into`, `Step Out`, etc.:
