@@ -3,42 +3,45 @@
 ///
 
 #include "artemis_i2c.h"
-#include "artemis_iom.h"
-#include <am_bsp.h>
-
-typedef struct s_i2c_t
-{
-    artemis_iom_instance_t instance;
-    am_hal_iom_transfer_t transfer;
-} i2c_t;
-
-typedef struct s_module_t
-{
-    i2c_t i2c[ARTEMIS_IOM_I2C_COUNT];
-} module_t;
-
-static module_t module;
 
 ///
 ///
 ///
-void artemis_i2c_initialize(void)
+bool artemis_i2c_send(artemis_i2c_t *i2c, artemis_iom_t *iom)
 {
-    artemis_iom_instance_t *instance;
+    am_hal_iom_transfer_t transfer = {0};
 
-    instance = &module.i2c[ARTEMIS_IOM_I2C0].instance;
-    instance->module = ARTEMIS_IOM_MODULE_I2C0;
-    instance->config.eInterfaceMode = AM_HAL_IOM_I2C_MODE;
-    instance->config.ui32ClockFreq = AM_HAL_IOM_400KHZ;
-    artemis_iom_initialize(instance);
-    am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SCL, g_AM_BSP_GPIO_IOM4_SCL);
-    am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
+    transfer.uPeerInfo.ui32I2CDevAddr = i2c->address;
+    transfer.bContinue = !i2c->stop;
+	transfer.pui32TxBuffer = (uint32_t *)artemis_stream_getbuffer(i2c->txstream);
+    transfer.ui32NumBytes = artemis_stream_written(i2c->txstream);
+    transfer.eDirection = AM_HAL_IOM_TX;
+	transfer.ui8Priority = 1;
 
-    instance = &module.i2c[ARTEMIS_IOM_I2C1].instance;
-    instance->module = ARTEMIS_IOM_MODULE_I2C1;
-    instance->config.eInterfaceMode = AM_HAL_IOM_I2C_MODE;
-    instance->config.ui32ClockFreq = AM_HAL_IOM_400KHZ;
-    artemis_iom_initialize(instance);
-    am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM3_SCL, g_AM_BSP_GPIO_IOM3_SCL);
-    am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM3_SDA, g_AM_BSP_GPIO_IOM3_SDA);
+    if (AM_HAL_STATUS_SUCCESS != am_hal_iom_blocking_transfer(iom->handle, &transfer)) {
+        return(false);
+    }
+
+    return(true);
+}
+
+///
+///
+///
+bool artemis_i2c_request(artemis_i2c_t *i2c, artemis_iom_t *iom)
+{
+    am_hal_iom_transfer_t transfer = {0};
+
+    transfer.uPeerInfo.ui32I2CDevAddr = i2c->address;
+    transfer.bContinue = !i2c->stop;
+	transfer.pui32RxBuffer = (uint32_t *)artemis_stream_getbuffer(i2c->rxstream);
+    transfer.ui32NumBytes = artemis_stream_length(i2c->rxstream);
+    transfer.eDirection = AM_HAL_IOM_RX;
+	transfer.ui8Priority = 1;
+
+    if (AM_HAL_STATUS_SUCCESS != am_hal_iom_blocking_transfer(iom->handle, &transfer)) {
+        return(false);
+    }
+
+    return(true);
 }
