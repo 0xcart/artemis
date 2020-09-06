@@ -20,7 +20,6 @@
 typedef enum e_taskid_t
 {
     ARTEMIS_SCHEDULER_TASKID_LED,
-    ARTEMIS_SCHEDULER_TASKID_SERVO,
     ARTEMIS_SCHEDULER_TASKID_COUNT
 } taskid_t;
 
@@ -40,8 +39,7 @@ typedef struct s_module_t
 
 static module_t module = {
     {
-        [ARTEMIS_SCHEDULER_TASKID_LED] = ARTEMIS_SCHEDULER_DEFINE_TASK("LED", artemis_led_initialize, artemis_led_toggle, ARTEMIS_TIME_HZ_TO_US(2)),
-        [ARTEMIS_SCHEDULER_TASKID_SERVO] = ARTEMIS_SCHEDULER_DEFINE_TASK("SERVO", artemis_servo_initialize, artemis_servo_update, ARTEMIS_TIME_HZ_TO_US(100))
+        [ARTEMIS_SCHEDULER_TASKID_LED] = ARTEMIS_SCHEDULER_DEFINE_TASK("LED", artemis_led_initialize, artemis_led_toggle, ARTEMIS_TIME_HZ_TO_US(2))
     }
 };
 

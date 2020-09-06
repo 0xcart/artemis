@@ -5,7 +5,6 @@
 #ifndef ARTEMIS_IOM_H
 #define ARTEMIS_IOM_H
 
-#include "artemis_stream.h"
 #include <am_bsp.h>
 
 #ifdef __cplusplus
@@ -24,8 +23,6 @@ typedef struct s_artemis_iom_t
     void *handle;
     artemis_iom_module_t module;
     am_hal_iom_config_t config;
-    artemis_stream_t txstream;
-    artemis_stream_t rxstream;
 } artemis_iom_t;
 
 void artemis_iom_initialize(artemis_iom_t *iom);

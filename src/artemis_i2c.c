@@ -7,14 +7,14 @@
 ///
 ///
 ///
-bool artemis_i2c_send(artemis_i2c_t *i2c)
+bool artemis_i2c_send(artemis_i2c_t *i2c, artemis_stream_t *txstream)
 {
     am_hal_iom_transfer_t transfer = {0};
 
     transfer.uPeerInfo.ui32I2CDevAddr = i2c->address;
     transfer.bContinue = !i2c->stop;
-	transfer.pui32TxBuffer = (uint32_t *)i2c->iom.txstream.buffer;
-    transfer.ui32NumBytes = i2c->iom.txstream.written;
+	transfer.pui32TxBuffer = (uint32_t *)txstream->buffer;
+    transfer.ui32NumBytes = txstream->written;
     transfer.eDirection = AM_HAL_IOM_TX;
 	transfer.ui8Priority = 1;
 
@@ -23,7 +23,7 @@ bool artemis_i2c_send(artemis_i2c_t *i2c)
     }
 
     // update the number of bytes read from the txstream
-    i2c->iom.txstream.read = i2c->iom.txstream.written;
+    txstream->read = txstream->written;
 
     return(true);
 }
@@ -31,13 +31,13 @@ bool artemis_i2c_send(artemis_i2c_t *i2c)
 ///
 ///
 ///
-bool artemis_i2c_receive(artemis_i2c_t *i2c, uint32_t rxnumber)
+bool artemis_i2c_receive(artemis_i2c_t *i2c, artemis_stream_t *rxstream, uint32_t rxnumber)
 {
     am_hal_iom_transfer_t transfer = {0};
 
     transfer.uPeerInfo.ui32I2CDevAddr = i2c->address;
     transfer.bContinue = !i2c->stop;
-	transfer.pui32RxBuffer = (uint32_t *)i2c->iom.rxstream.buffer;
+	transfer.pui32RxBuffer = (uint32_t *)rxstream->buffer;
     transfer.ui32NumBytes = rxnumber;
     transfer.eDirection = AM_HAL_IOM_RX;
 	transfer.ui8Priority = 1;
@@ -47,7 +47,7 @@ bool artemis_i2c_receive(artemis_i2c_t *i2c, uint32_t rxnumber)
     }
 
     // update the number of bytes written to the rxstream
-    i2c->iom.rxstream.written = rxnumber;
+    rxstream->written = rxnumber;
 
     return(true);
 }

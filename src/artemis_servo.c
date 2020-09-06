@@ -52,14 +52,15 @@ static void module_servo_reset(void);
 void artemis_servo_initialize(void)
 {
     artemis_i2c_t *i2c = &module.i2c;
+
+    i2c->address = ARTEMIS_SERVO_PCA9685_ADDRESS;
+    i2c->stop = true;
+
     i2c->iom.module = ARTEMIS_IOM_MODULE_I2C0; // QWIIC
     i2c->iom.config.eInterfaceMode = AM_HAL_IOM_I2C_MODE;
     i2c->iom.config.ui32ClockFreq = AM_HAL_IOM_400KHZ;
-    i2c->address = ARTEMIS_SERVO_PCA9685_ADDRESS;
-    i2c->stop = true;
-    artemis_stream_setbuffer(&i2c->iom.txstream, (uint8_t *)module.txbuffer, ARTEMIS_SERVO_I2CBUFFER_SIZE);
-    artemis_stream_setbuffer(&i2c->iom.rxstream, (uint8_t *)module.rxbuffer, ARTEMIS_SERVO_I2CBUFFER_SIZE);
     artemis_iom_initialize(&i2c->iom);
+
     am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SCL, g_AM_BSP_GPIO_IOM4_SCL);
     am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
 
@@ -80,7 +81,7 @@ void artemis_servo_pwm(uint8_t pin, uint16_t value)
 {
     uint16_t on;
     uint16_t off;
-    artemis_stream_t *txstream = &module.i2c.iom.txstream;
+    artemis_stream_t txstream;
 
     value = ARTEMIS_MATH_MIN(value, ARTEMIS_SERVO_PCA9685_MAXSTEP);
 
@@ -97,13 +98,13 @@ void artemis_servo_pwm(uint8_t pin, uint16_t value)
         off = value;
     }
 
-    artemis_stream_reset(txstream);
-    artemis_stream_put(txstream, ARTEMIS_SERVO_PCA9685_LED0_ON_L + (pin * 4));
-    artemis_stream_put(txstream, on);
-    artemis_stream_put(txstream, on >> 8);
-    artemis_stream_put(txstream, off);
-    artemis_stream_put(txstream, off >> 8);
-    artemis_i2c_send(&module.i2c);
+    artemis_stream_setbuffer(&txstream, (uint8_t *)module.txbuffer, ARTEMIS_SERVO_I2CBUFFER_SIZE);
+    artemis_stream_put(&txstream, ARTEMIS_SERVO_PCA9685_LED0_ON_L + (pin * 4));
+    artemis_stream_put(&txstream, on);
+    artemis_stream_put(&txstream, on >> 8);
+    artemis_stream_put(&txstream, off);
+    artemis_stream_put(&txstream, off >> 8);
+    artemis_i2c_send(&module.i2c, &txstream);
 }
 
 ///
@@ -111,10 +112,10 @@ void artemis_servo_pwm(uint8_t pin, uint16_t value)
 ///
 static void module_servo_reset(void)
 {
-    artemis_stream_t *txstream = &module.i2c.iom.txstream;
+    artemis_stream_t txstream;
 
-    artemis_stream_reset(txstream);
-    artemis_stream_put(txstream, ARTEMIS_SERVO_PCA9685_MODE1);
-    artemis_stream_put(txstream, ARTEMIS_SERVO_MODE1_RESTART);
-    artemis_i2c_send(&module.i2c);
+    artemis_stream_setbuffer(&txstream, (uint8_t *)module.txbuffer, ARTEMIS_SERVO_I2CBUFFER_SIZE);
+    artemis_stream_put(&txstream, ARTEMIS_SERVO_PCA9685_MODE1);
+    artemis_stream_put(&txstream, ARTEMIS_SERVO_MODE1_RESTART);
+    artemis_i2c_send(&module.i2c, &txstream);
 }
