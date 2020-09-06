@@ -4,7 +4,6 @@
 
 #include "artemis_led.h"
 #include "artemis_scheduler.h"
-#include "artemis_servo.h"
 #include "artemis_time.h"
 #include <stddef.h>
 #include <stdint.h>
