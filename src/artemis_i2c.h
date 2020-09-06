@@ -6,7 +6,6 @@
 #define ARTEMIS_I2C_H
 
 #include "artemis_iom.h"
-#include "artemis_stream.h"
 #include <stdbool.h>
 
 #ifdef __cplusplus
@@ -15,14 +14,13 @@ extern "C" {
 
 typedef struct s_artemis_i2c_t
 {
+    artemis_iom_t iom;
     uint8_t address;
     bool stop;
-    artemis_stream_t *txstream;
-    artemis_stream_t *rxstream;
 } artemis_i2c_t;
 
-bool artemis_i2c_send(artemis_i2c_t *i2c, artemis_iom_t *iom);
-bool artemis_i2c_request(artemis_i2c_t *i2c, artemis_iom_t *iom);
+bool artemis_i2c_send(artemis_i2c_t *i2c);
+bool artemis_i2c_receive(artemis_i2c_t *i2c);
 
 #ifdef __cplusplus
 }
