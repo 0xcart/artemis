@@ -7,6 +7,7 @@
 
 #include "artemis_iom.h"
 #include <stdbool.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,7 +21,7 @@ typedef struct s_artemis_i2c_t
 } artemis_i2c_t;
 
 bool artemis_i2c_send(artemis_i2c_t *i2c);
-bool artemis_i2c_receive(artemis_i2c_t *i2c);
+bool artemis_i2c_receive(artemis_i2c_t *i2c, uint32_t rxnumber);
 
 #ifdef __cplusplus
 }

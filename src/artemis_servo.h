@@ -13,6 +13,7 @@ extern "C" {
 
 void artemis_servo_initialize(void);
 void artemis_servo_update(uint64_t elapsed_us);
+void artemis_servo_pwm(uint8_t pin, uint16_t value);
 
 #ifdef __cplusplus
 }

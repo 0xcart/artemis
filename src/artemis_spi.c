@@ -31,14 +31,14 @@ bool artemis_spi_send(artemis_spi_t *spi)
 ///
 ///
 ///
-bool artemis_spi_receive(artemis_spi_t *spi)
+bool artemis_spi_receive(artemis_spi_t *spi, uint32_t rxnumber)
 {
     am_hal_iom_transfer_t transfer = {0};
 
 	transfer.uPeerInfo.ui32SpiChipSelect = 0;
     transfer.bContinue = false;
 	transfer.pui32RxBuffer = (uint32_t *)spi->iom.rxstream.buffer;
-    transfer.ui32NumBytes = spi->iom.rxnumber;
+    transfer.ui32NumBytes = rxnumber;
     transfer.eDirection = AM_HAL_IOM_RX;
 	transfer.ui8Priority = 1;
 
@@ -47,7 +47,7 @@ bool artemis_spi_receive(artemis_spi_t *spi)
     }
 
     // update the number of bytes written to the rxstream
-    spi->iom.rxstream.written = spi->iom.rxnumber;
+    spi->iom.rxstream.written = rxnumber;
 
     return(true);
 }
