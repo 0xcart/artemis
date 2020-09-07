@@ -45,11 +45,13 @@
 #define ARTEMIS_PCA9685_MODE2_OUTNE10    (0x02) // LEDn = high-impedance
 #define ARTEMIS_PCA9685_MODE2_OUTNE01    (0x01) // LEDn = 1 when OUTDRV = 1; LEDn = high-impedance when OUTDRV = 0 (same as OUTNE10)
 
-// application specific
+// PCA9685 attributes
 #define ARTEMIS_PCA9685_I2C_ADDRESS      (0x40)
 #define ARTEMIS_PCA9685_OSCILLATOR_FREQ  (25000000)
 #define ARTEMIS_PCA9685_STEP_MINIMUM     (0)    // 12-bit resolution (0 to 4095)
 #define ARTEMIS_PCA9685_STEP_MAXIMUM     (4095) // 12-bit resolution (0 to 4095)
+
+// application specific
 #define ARTEMIS_PCA9685_OUTPUT_FREQ      (50)   // Analog servos run at 50Hz
 #define ARTEMIS_PCA9685_PRESCALE_FREQ    (((ARTEMIS_PCA9685_OSCILLATOR_FREQ / (ARTEMIS_PCA9685_OUTPUT_FREQ * 4096.0f)) + 0.5f) - 1)
 #define ARTEMIS_PCA9685_I2CBUFFER_SIZE   (32)   // bytes; must be a multiple of sizeof(uint32_t)

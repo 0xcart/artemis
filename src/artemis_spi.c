@@ -74,10 +74,8 @@ bool artemis_spi_transfer(artemis_spi_t *spi, artemis_stream_t *txstream, artemi
     // update the number of bytes read from the txstream
     txstream->read = txstream->written;
 
-    // update the number of bytes written to the rxstream assuming the
-    // number of bytes received equals the number of bytes sent based
-    // on the implementation of the above hal fullduplex function
-    rxstream->written = txstream->written; 
+    // update the number of bytes written to the rxstream
+    rxstream->written = txstream->written;
 
     return(true);
 }
