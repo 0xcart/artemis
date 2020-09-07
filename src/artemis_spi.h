@@ -14,8 +14,15 @@
 extern "C" {
 #endif
 
+typedef enum s_artemis_spi_bitorder_t
+{
+    ARTEMIS_SPI_BITORDER_MSB,
+    ARTEMIS_SPI_BITORDER_LSB
+} artemis_spi_bitorder_t;
+
 typedef struct s_artemis_spi_t
 {
+    artemis_spi_bitorder_t bitorder;
     artemis_iom_t iom;
 } artemis_spi_t;
 
