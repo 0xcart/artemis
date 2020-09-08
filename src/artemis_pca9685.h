@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-void artemis_pca9685_initialize(void);
-void artemis_pca9685_pwm(uint8_t pin, uint16_t value, bool invert);
+void artemis_pca9685_initialize(uint16_t frequency);
+void artemis_pca9685_setpwm(uint8_t pin, uint16_t value, bool invert);
 
 #ifdef __cplusplus
 }

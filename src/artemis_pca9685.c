@@ -10,7 +10,7 @@
 #include "artemis_pca9685.h"
 #include "artemis_time.h"
 
-// PCA9685 register
+// PCA9685 registers
 #define ARTEMIS_PCA9685_REG_MODE1        (0x00) // mode register 1
 #define ARTEMIS_PCA9685_REG_MODE2        (0x01) // mode register 2
 #define ARTEMIS_PCA9685_REG_SUBADR1      (0x02) // I2C-bus subaddress 1
@@ -50,10 +50,9 @@
 #define ARTEMIS_PCA9685_OSCILLATOR_FREQ  (25000000)
 #define ARTEMIS_PCA9685_STEP_MINIMUM     (0)    // 12-bit resolution (0 to 4095)
 #define ARTEMIS_PCA9685_STEP_MAXIMUM     (4095) // 12-bit resolution (0 to 4095)
+#define ARTEMIS_PCA9685_STEP_FULL        (4096) // signal fully on/off
 
 // application specific
-#define ARTEMIS_PCA9685_OUTPUT_FREQ      (50)   // Analog servos run at 50Hz
-#define ARTEMIS_PCA9685_PRESCALE_FREQ    (((ARTEMIS_PCA9685_OSCILLATOR_FREQ / (ARTEMIS_PCA9685_OUTPUT_FREQ * 4096.0f)) + 0.5f) - 1)
 #define ARTEMIS_PCA9685_I2CBUFFER_SIZE   (32)   // bytes; must be a multiple of sizeof(uint32_t)
 
 // while i2c operates on bytes the hal operates on 32-bit words
@@ -69,12 +68,12 @@ typedef struct s_module_t
 static module_t module;
 
 static void module_pca9685_reset(void);
-static void module_pca9685_frequency(void);
+static void module_pca9685_setfrequency(uint16_t frequency);
 
 ///
 ///
 ///
-void artemis_pca9685_initialize(void)
+void artemis_pca9685_initialize(uint16_t frequency)
 {
     artemis_i2c_t *i2c = &module.i2c;
 
@@ -89,14 +88,14 @@ void artemis_pca9685_initialize(void)
     am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
 
     module_pca9685_reset();
-    module_pca9685_frequency();
+    module_pca9685_setfrequency(frequency);
     module_pca9685_reset();
 }
 
 ///
 ///
 ///
-void artemis_pca9685_pwm(uint8_t pin, uint16_t value, bool invert)
+void artemis_pca9685_setpwm(uint8_t pin, uint16_t value, bool invert)
 {
     uint16_t on;
     uint16_t off;
@@ -107,10 +106,10 @@ void artemis_pca9685_pwm(uint8_t pin, uint16_t value, bool invert)
     if (invert) {
         if (ARTEMIS_PCA9685_STEP_MAXIMUM == value) {
             on = 0;
-            off = ARTEMIS_PCA9685_STEP_MAXIMUM;
+            off = ARTEMIS_PCA9685_STEP_FULL;
         }
         else if (ARTEMIS_PCA9685_STEP_MINIMUM == value) {
-            on = ARTEMIS_PCA9685_STEP_MAXIMUM;
+            on = ARTEMIS_PCA9685_STEP_FULL;
             off = 0;
         }
         else {
@@ -120,12 +119,12 @@ void artemis_pca9685_pwm(uint8_t pin, uint16_t value, bool invert)
     }
     else {
         if (ARTEMIS_PCA9685_STEP_MAXIMUM == value) {
-            on = ARTEMIS_PCA9685_STEP_MAXIMUM;
+            on = ARTEMIS_PCA9685_STEP_FULL;
             off = 0;
         }
         else if (ARTEMIS_PCA9685_STEP_MINIMUM == value) {
             on = 0;
-            off = ARTEMIS_PCA9685_STEP_MAXIMUM;
+            off = ARTEMIS_PCA9685_STEP_FULL;
         }
         else {
             on = 0;
@@ -160,12 +159,15 @@ static void module_pca9685_reset(void)
 ///
 ///
 ///
-static void module_pca9685_frequency(void)
+static void module_pca9685_setfrequency(uint16_t frequency)
 {
+    uint8_t prescale;
     uint8_t oldmode = 0;
     uint8_t newmode = 0;
     artemis_stream_t txstream;
     artemis_stream_t rxstream;
+
+    prescale = (uint8_t)(((ARTEMIS_PCA9685_OSCILLATOR_FREQ / (frequency * 4096.0f)) + 0.5f) - 1.0f);
 
     artemis_stream_setbuffer(&txstream, (uint8_t *)module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_SIZE);
     artemis_stream_put(&txstream, ARTEMIS_PCA9685_REG_MODE1);
@@ -185,7 +187,7 @@ static void module_pca9685_frequency(void)
 
     artemis_stream_reset(&txstream);
     artemis_stream_put(&txstream, ARTEMIS_PCA9685_REG_PRESCALE);
-    artemis_stream_put(&txstream, ARTEMIS_PCA9685_PRESCALE_FREQ);
+    artemis_stream_put(&txstream, prescale);
     artemis_i2c_send(&module.i2c, &txstream);
 
     artemis_stream_reset(&txstream);
