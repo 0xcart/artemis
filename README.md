@@ -8,7 +8,7 @@ While the current configuration supports Segger J-Link, it can be configured to 
 
 The SparkFun Artemis [forum](https://forum.sparkfun.com/viewforum.php?f=167) is highly recommended for information and support.
 
-In addition to providing a starting template to develop, build, load, and debug with Visual Studio Code, this project also serves as a foundation for a quadruped robot inspired by the work of [Martin Triendl](https://www.youtube.com/watch?v=QWxBLGjrkEU). While the full implementation is maintained in a seperate repository, core components are updated in this repository to provide others a starting point (or at minimum, example code). For example, the code demonstrates how to control servos using the [PCA9685 Servo Driver](https://www.adafruit.com/product/815) over I2C via the AmbiqSuiteSDK HAL transfer functions.
+In addition to providing a starting template to develop, build, load, and debug with Visual Studio Code, this project also serves as a foundation for a quadruped robot inspired by the work of [Martin Triendl](https://www.youtube.com/watch?v=QWxBLGjrkEU). While the full implementation is maintained in a seperate repository, core components are updated in this repository to provide others a starting point (or at minimum, example code). For instance, the code demonstrates how to control servos using the [PCA9685 Servo Driver](https://www.adafruit.com/product/815) over I2C via the AmbiqSuiteSDK HAL `transfer` functions.
 
 ## Dependencies
 
@@ -329,7 +329,7 @@ am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
 
 The first line in the above code snippet specifies which IOM module to use. In this case, `ARTEMIS_IOM_MODULE_I2C0`, which is a constant with a value of `4`. This constant is defined in the enumeration `artemis_iom_module_t` found in [artemis_iom.h](src/artemis_iom.h). The purpose of this enumeration is to specify which IOM modules (0 through 5) to use for the respective I2C and SPI interfaces on your board. The `QWIIC` connector on the Artemis Thing Plus uses `IOM4`. Change the value (if required) for each of these enumerations to conform to the desired IOM module as defined in the `am_bsp_pins.h` file.
 
-You can also add an enumeration. For example, you can add `ARTEMIS_IOM_MODULE_SPI1` to the `artemis_iom_module_t` enumeration with a value that matches the desired IOM module. When doing so you need to consult the [schematic](doc/artemis/ArtemisThingPlusSchematic.pdf) for your board (I've linked to the schematic for the Artemis Thing Plus). Let's look at the SPI declarations for `IOM1` in `am_bsp_pins.h` for the Artemis Thing Plus.
+You can also add an enumeration. For example, you can add `ARTEMIS_IOM_MODULE_SPI1` to the `artemis_iom_module_t` enumeration with a value that matches the desired IOM module. When doing so you need to consult the [schematic](doc/artemis/ArtemisThingPlusSchematic.pdf) for your board (I've linked to the schematic for the Artemis Thing Plus). Let's look at the SPI declarations for `IOM1` in `am_bsp_pins.h` for the Artemis Thing Plus:
 
 ```C
 //*****************************************************************************
@@ -357,7 +357,7 @@ extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM1_MOSI;
 extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM1_SCK;
 ```
 
-Note the pin values specified for MISO, MOSI, and SCK respectively. These are pins on the Artemis (mcu) module. Consulting the schematic, the Artemis module is depicted on the bottom left of page 1 and titled, `Artemis (Apollo3)`. You'll find pins 9, 10, and 8 shown as D9, D10, and D8. You'll also find they're not mapped to board pins on the Artemis Thing Plus. Thus you cannot use `IOM1` for an additional SPI interface. Let's try `IOM2`:
+Note the pin values specified for MISO, MOSI, and SCK respectively. These are pins on the Artemis (mcu) module. Consulting the [schematic](doc/artemis/ArtemisThingPlusSchematic.pdf), the Artemis module is depicted on the bottom left of page 1 and titled `Artemis (Apollo3)`. You'll find pins 9, 10, and 8 shown as D9, D10, and D8. You'll also find they're not mapped to board pins on the Artemis Thing Plus. Thus you cannot use `IOM1` for an additional SPI interface. Let's try `IOM2`:
 
 ```C
 //*****************************************************************************
@@ -400,4 +400,4 @@ am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SCL, g_AM_BSP_GPIO_IOM4_SCL);
 am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
 ```
 
-The final two lines configure the pins on the Artemis module. The values are those we just reviewed and come straight from the `am_bsp_pins.h` file. Again, they should conform to the IOM module being used. In this case, `IOM4`.
+The final two lines configure the pins on the Artemis module. The values are those we just reviewed and come straight from the `am_bsp_pins.h` file. Again, they should conform to the IOM module being used. In this case, `IOM4`, which matches the value of the enumeration `ARTEMIS_IOM_MODULE_I2C0`.
