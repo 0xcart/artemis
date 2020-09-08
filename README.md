@@ -8,6 +8,8 @@ While the current configuration supports Segger J-Link, it can be configured to 
 
 The SparkFun Artemis [forum](https://forum.sparkfun.com/viewforum.php?f=167) is highly recommended for information and support.
 
+In addition to providing a starting template to develop, build, load, and debug with Visual Studio Code, this project also serves as a foundation for a quadruped robot inspired by the work of [Martin Triendl](https://www.youtube.com/watch?v=QWxBLGjrkEU). While the full implementation is maintained in a seperate repository, core components are updated in this repository to provide others a starting point (or at minimum, example code). For example, the code demonstrates how to control servos using the [PCA9685 Servo Driver](https://www.adafruit.com/product/815) over I2C via the AmbiqSuiteSDK HAL transfer functions.
+
 ## Dependencies
 
 The latest version of each tool/extension should be used unless otherwise noted. During installation, if the option is available to add a given tool to the system PATH environment variable, please do so. This is very important for the GNU Arm Embedded Toolchain.
@@ -172,7 +174,14 @@ Compiling 'src/artemis_main.c'
 Compiling 'src/artemis_cpu.c'
 Compiling 'src/artemis_time.c'
 Compiling 'src/artemis_scheduler.c'
+Compiling 'src/artemis_task.c'
 Compiling 'src/artemis_led.c'
+Compiling 'src/artemis_iom.c'
+Compiling 'src/artemis_i2c.c'
+Compiling 'src/artemis_spi.c'
+Compiling 'src/artemis_stream.c'
+Compiling 'src/artemis_pca9685.c'
+Compiling 'src/artemis_servo.c'
 Compiling 'AmbiqSuiteSDK/devices/am_devices_led.c'
 Compiling 'AmbiqSuiteSDK/utils/am_util_delay.c'
 Compiling 'AmbiqSuiteSDK/utils/am_util_stdio.c'
@@ -189,10 +198,17 @@ A `bin` directory is created containing the following list of output files:
 * am_util_delay.o
 * am_util_stdio.o
 * artemis_cpu.o
+* artemis_i2c.o
+* artemis_iom.o
 * artemis_led.o
 * artemis_main.o
+* artemis_pca9685.o
 * artemis_scheduler.o
+* artemis_servo.o
+* artemis_spi.o
 * artemis_startup.o
+* artemis_stream.o
+* artemis_task.o
 * artemis_time.o
 * output_svl.axf
 * output_svl.bin
@@ -212,16 +228,16 @@ phase:  setup
         Sending 'enter bootloader' command
 
 phase:  bootload
-        have 9608 bytes to send in 5 frames
+        have 9640 bytes to send in 5 frames
         sending frame #1, length: 2048
         sending frame #2, length: 2048
         sending frame #3, length: 2048
         sending frame #4, length: 2048
-        sending frame #5, length: 1416
+        sending frame #5, length: 1448
 
         Upload complete
 
-        Nominal bootload bps: 37931.53
+        Nominal bootload bps: 37956.33
 ```
 
 ### Debug
@@ -293,3 +309,95 @@ To clean the project, again bring up the build task by pressing `Ctrl + Shift + 
 ```shell
 Removing 'bin' directory
 ```
+
+## Configuration
+
+As described in the introductory section, this repository supports a quadruped robot. As such it includes code to control servos using the [PCA9685 Servo Driver](https://www.adafruit.com/product/815) over I2C via the AmbiqSuiteSDK HAL `transfer` functions. The PCA9685 I2C implementation is configured to use the QWIIC connector on an Artemis Thing Plus. If you're using a different Artemis board you should confirm or modify these settings as described in the remainder of this section.
+
+### Input/Output Master (IOM)
+
+Open the `am_bsp_pins.h` file located in `artemis/AmbiqSuiteSDK/boards_sfe/<your board>/bsp`. Here you will find the definition of allowable pin configurations including those for I2C and SPI which are grouped as "modules" from `IOM0` to `IOM5` (there could be more or less depending on your board). Now review the function `artemis_pca9685_initialize()` found in [artemis_pca9685.c](src/artemis_pca9685.c). It includes the following code:
+
+```C
+i2c->iom.module = ARTEMIS_IOM_MODULE_I2C0; // QWIIC
+i2c->iom.config.eInterfaceMode = AM_HAL_IOM_I2C_MODE;
+i2c->iom.config.ui32ClockFreq = AM_HAL_IOM_400KHZ;
+artemis_iom_initialize(&i2c->iom);
+am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SCL, g_AM_BSP_GPIO_IOM4_SCL);
+am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
+```
+
+The first line in the above code snippet specifies which IOM module to use. In this case, `ARTEMIS_IOM_MODULE_I2C0`, which is a constant with a value of `4`. This constant is defined in the enumeration `artemis_iom_module_t` found in [artemis_iom.h](src/artemis_iom.h). The purpose of this enumeration is to specify which IOM modules (0 through 5) to use for the respective I2C and SPI interfaces on your board. The `QWIIC` connector on the Artemis Thing Plus uses `IOM4`. Change the value (if required) for each of these enumerations to conform to the desired IOM module as defined in the `am_bsp_pins.h` file.
+
+You can also add an enumeration. For example, you can add `ARTEMIS_IOM_MODULE_SPI1` to the `artemis_iom_module_t` enumeration with a value that matches the desired IOM module. When doing so you need to consult the [schematic](doc/artemis/ArtemisThingPlusSchematic.pdf) for your board (I've linked to the schematic for the Artemis Thing Plus). Let's look at the SPI declarations for `IOM1` in `am_bsp_pins.h` for the Artemis Thing Plus.
+
+```C
+//*****************************************************************************
+//
+//  IOM1_MISO pin: I/O Master 1 SPI MISO signal.
+//
+//*****************************************************************************
+#define AM_BSP_GPIO_IOM1_MISO           9
+extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM1_MISO;
+
+//*****************************************************************************
+//
+//  IOM1_MOSI pin: I/O Master 1 SPI MOSI signal.
+//
+//*****************************************************************************
+#define AM_BSP_GPIO_IOM1_MOSI           10
+extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM1_MOSI;
+
+//*****************************************************************************
+//
+//  IOM1_SCK pin: I/O Master 1 SPI SCK signal.
+//
+//*****************************************************************************
+#define AM_BSP_GPIO_IOM1_SCK            8
+extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM1_SCK;
+```
+
+Note the pin values specified for MISO, MOSI, and SCK respectively. These are pins on the Artemis (mcu) module. Consulting the schematic, the Artemis module is depicted on the bottom left of page 1 and titled, `Artemis (Apollo3)`. You'll find pins 9, 10, and 8 shown as D9, D10, and D8. You'll also find they're not mapped to board pins on the Artemis Thing Plus. Thus you cannot use `IOM1` for an additional SPI interface. Let's try `IOM2`:
+
+```C
+//*****************************************************************************
+//
+//  IOM2_MISO pin: I/O Master 2 SPI MISO signal.
+//
+//*****************************************************************************
+#define AM_BSP_GPIO_IOM2_MISO           25
+extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM2_MISO;
+
+//*****************************************************************************
+//
+//  IOM2_MOSI pin: I/O Master 2 SPI MOSI signal.
+//
+//*****************************************************************************
+#define AM_BSP_GPIO_IOM2_MOSI           28
+extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM2_MOSI;
+
+//*****************************************************************************
+//
+//  IOM2_SCK pin: I/O Master 2 SPI SCK signal.
+//
+//*****************************************************************************
+#define AM_BSP_GPIO_IOM2_SCK            27
+extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM2_SCK;
+```
+
+Again, consult the schematic. D25, D28, and D27 on the Artemis module are mapped to D0, D8, and D7 respectively. Now look at the diagram on the bottom right of page 1 titled, `Headers`. You'll find D0, D8, and D7 mapped to board pins 14, 5, and 6. Here is a picture of the back of the Artemis Thing Plus. Pin 14 is labelled 0/RX1. Pins 5 and 6 are labelled as such.
+
+![Artemis Thing Plus](doc/image/sfe-atp-back.jpg)
+
+For convience, here again is the code snippet from `artemis_pca9685_initialize()` found in [artemis_pca9685.c](src/artemis_pca9685.c):
+
+```C
+i2c->iom.module = ARTEMIS_IOM_MODULE_I2C0; // QWIIC
+i2c->iom.config.eInterfaceMode = AM_HAL_IOM_I2C_MODE;
+i2c->iom.config.ui32ClockFreq = AM_HAL_IOM_400KHZ;
+artemis_iom_initialize(&i2c->iom);
+am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SCL, g_AM_BSP_GPIO_IOM4_SCL);
+am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
+```
+
+The final two lines configure the pins on the Artemis module. The values are those we just reviewed and come straight from the `am_bsp_pins.h` file. Again, they should conform to the IOM module being used. In this case, `IOM4`.
