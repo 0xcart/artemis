@@ -8,7 +8,7 @@ While the current configuration supports Segger J-Link, it can be configured to 
 
 The SparkFun Artemis [forum](https://forum.sparkfun.com/viewforum.php?f=167) is highly recommended for information and support.
 
-In addition to providing a starting template to develop, build, load, and debug with Visual Studio Code, this project also serves as a foundation for a quadruped robot inspired by the work of [Martin Triendl](https://www.youtube.com/watch?v=QWxBLGjrkEU). While the full implementation is maintained in a seperate repository, core components are updated in this repository to provide others a starting point (or at minimum, example code). For instance, the code demonstrates how to control servos using the [PCA9685 Servo Driver](https://www.adafruit.com/product/815) over I2C via the AmbiqSuiteSDK HAL `transfer` functions.
+In addition to providing a starting template to develop, build, load, and debug with Visual Studio Code, this project also serves as a foundation for a quadruped robot inspired by the work of [Martin Triendl](https://www.youtube.com/watch?v=QWxBLGjrkEU). While the full implementation is maintained in a seperate repository, core components are updated in this repository to provide others a starting point (or at minimum, example code). For instance, the code demonstrates how to control servos using the [PCA9685 Servo Driver](doc/pca9685/adafruit-16-channel-pwm-servo-driver.pdf) over I2C via the AmbiqSuiteSDK HAL `transfer` functions.
 
 ## Dependencies
 
