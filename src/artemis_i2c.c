@@ -13,10 +13,10 @@ bool artemis_i2c_send(artemis_i2c_t *i2c, artemis_stream_t *txstream)
 
     transfer.uPeerInfo.ui32I2CDevAddr = i2c->address;
     transfer.bContinue = !i2c->stop;
-	transfer.pui32TxBuffer = (uint32_t *)txstream->buffer;
+    transfer.pui32TxBuffer = (uint32_t *)txstream->buffer;
     transfer.ui32NumBytes = txstream->written;
     transfer.eDirection = AM_HAL_IOM_TX;
-	transfer.ui8Priority = 1;
+    transfer.ui8Priority = 1;
 
     if (AM_HAL_STATUS_SUCCESS != am_hal_iom_blocking_transfer(i2c->iom.handle, &transfer)) {
         return(false);
@@ -37,10 +37,10 @@ bool artemis_i2c_receive(artemis_i2c_t *i2c, artemis_stream_t *rxstream, uint32_
 
     transfer.uPeerInfo.ui32I2CDevAddr = i2c->address;
     transfer.bContinue = !i2c->stop;
-	transfer.pui32RxBuffer = (uint32_t *)rxstream->buffer;
+    transfer.pui32RxBuffer = (uint32_t *)rxstream->buffer;
     transfer.ui32NumBytes = rxnumber;
     transfer.eDirection = AM_HAL_IOM_RX;
-	transfer.ui8Priority = 1;
+    transfer.ui8Priority = 1;
 
     if (AM_HAL_STATUS_SUCCESS != am_hal_iom_blocking_transfer(i2c->iom.handle, &transfer)) {
         return(false);
