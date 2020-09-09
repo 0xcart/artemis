@@ -389,7 +389,7 @@ Again, consult the schematic. D25, D28, and D27 on the Artemis module are mapped
 
 ![Artemis Thing Plus](doc/image/sfe-atp-back.jpg)
 
-For convience, here again is the code snippet from `artemis_pca9685_initialize()` found in [artemis_pca9685.c](src/artemis_pca9685.c):
+For convenience, here again is the code snippet from `artemis_pca9685_initialize()` found in [artemis_pca9685.c](src/artemis_pca9685.c):
 
 ```C
 i2c->iom.module = ARTEMIS_IOM_MODULE_I2C0; // QWIIC
