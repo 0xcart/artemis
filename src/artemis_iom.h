@@ -15,7 +15,7 @@ typedef enum e_artemis_iom_module_t
 {
     ARTEMIS_IOM_MODULE_I2C0 = 4, // QWIIC
     ARTEMIS_IOM_MODULE_I2C1 = 3, // Pins: 17/SCL, 16/SDA
-    ARTEMIS_IOM_MODULE_SPI0 = 0  // Pins: 13/SCK, 12/MISO, 11/MOSI, A2/CS
+    ARTEMIS_IOM_MODULE_SPI0 = 0  // Pins: 13/SCK, 12/MISO, 11/MOSI
 } artemis_iom_module_t;
 
 typedef struct s_artemis_iom_t

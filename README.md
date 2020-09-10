@@ -49,7 +49,7 @@ Launch Visual Studio Code.
 
 Click `File`, `Open Folder...` from the main menu. Select the `artemis` folder and click `Select Folder`. You should now see the following in the `Explorer` view within Visual Studio Code:
 
-![Explorer](doc/image/explorer.jpg)
+![Explorer](doc/asset/image/explorer.jpg)
 
 ### Configure the Cortex-Debug Visual Studio Code extension
 
@@ -163,7 +163,7 @@ In the future, when you're ready to add additional source files, libraries, etc.
 
 Press `F1`. This will display a popup menu listing all commands. Select `Tasks: Run Build Task` from the list of commands to display the build task. Alternatively you can press `Ctrl + Shift + B` to reach the same build task.
 
-![Build](doc/image/build.jpg)
+![Build](doc/asset/image/build.jpg)
 
 To build the project select `svl binary`. You should see the following printed to the console:
 
@@ -244,7 +244,7 @@ phase:  bootload
 
 To begin debugging press `F5`. This will launch the Segger J-Link GDB server. Your application will stop at a breakpoint in `main()`:
 
-![main()](doc/image/main.jpg)
+![main()](doc/asset/image/main.jpg)
 
 You should see the following printed to the `DEBUG CONSOLE` tab at the bottom of Visual Studio Code:
 
@@ -267,17 +267,17 @@ Temporary breakpoint 1, main () at src/artemis_main.c:17
 
 At the top of Visual Studio Code you'll find a popup dialog with Debug buttons that include `Continue`, `Step Over`, `Step Into`, `Step Out`, etc.:
 
-![Debug](doc/image/debug.jpg)
+![Debug](doc/asset/image/debug.jpg)
 
 Click the `Continue` button.
 
 At the bottom of Visual Studio Code you'll find several output consoles:
 
-![Output](doc/image/output.jpg)
+![Output](doc/asset/image/output.jpg)
 
 Click on the `OUTPUT` tab. By default, `Adapter Output` is selected in the drop-down menu on the right:
 
-![Adapter](doc/image/adapter.jpg)
+![Adapter](doc/asset/image/adapter.jpg)
 
 You should see the following (or similar) printed to the `OUTPUT` tab:
 
@@ -292,7 +292,7 @@ Reading register (d15 = 0x       0)
 
 In the drop down menu on the right (the selection is currently `Adapter Output`) select `SWO: ITM [port: 0, type: console]`:
 
-![SWO](doc/image/swo.jpg)
+![SWO](doc/asset/image/swo.jpg)
 
 You should see the following (or similar) printed to the `OUTPUT` tab:
 
@@ -328,6 +328,15 @@ am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
 ```
 
 The first line in the above code snippet specifies which IOM module to use. In this case, `ARTEMIS_IOM_MODULE_I2C0`, which is a constant with a value of `4`. This constant is defined in the enumeration `artemis_iom_module_t` found in [artemis_iom.h](src/artemis_iom.h). The purpose of this enumeration is to specify which IOM modules (0 through 5) to use for the respective I2C and SPI interfaces on your board. The `QWIIC` connector on the Artemis Thing Plus uses `IOM4`. Change the value (if required) for each of these enumerations to conform to the desired IOM module as defined in the `am_bsp_pins.h` file.
+
+```C
+typedef enum e_artemis_iom_module_t
+{
+    ARTEMIS_IOM_MODULE_I2C0 = 4, // QWIIC
+    ARTEMIS_IOM_MODULE_I2C1 = 3, // Pins: 17/SCL, 16/SDA
+    ARTEMIS_IOM_MODULE_SPI0 = 0  // Pins: 13/SCK, 12/MISO, 11/MOSI
+} artemis_iom_module_t;
+```
 
 You can also add an enumeration. For example, you can add `ARTEMIS_IOM_MODULE_SPI1` to the `artemis_iom_module_t` enumeration with a value that matches the desired IOM module. When doing so you need to consult the [schematic](doc/hardware/artemis/ArtemisThingPlusSchematic.pdf) for your board (I've linked to the schematic for the Artemis Thing Plus). Let's look at the SPI declarations for `IOM1` in `am_bsp_pins.h` for the Artemis Thing Plus:
 
@@ -385,11 +394,23 @@ extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM2_MOSI;
 extern const am_hal_gpio_pincfg_t       g_AM_BSP_GPIO_IOM2_SCK;
 ```
 
-Again, consult the schematic. D25, D28, and D27 on the Artemis module are mapped to D0, D8, and D7 respectively. Now look at the diagram on the bottom right of page 1 titled, `Headers`. You'll find D0, D8, and D7 mapped to board pins 14, 5, and 6. Here is a picture of the back of the Artemis Thing Plus. Pin 14 is labelled 0/RX1. Pins 5 and 6 are labelled as such.
+Again, consult the schematic. D25, D28, and D27 on the Artemis module are mapped to D0, D8, and D7 respectively. Now look at the diagram on the bottom right of page 1 titled `Headers`. You'll find D0, D8, and D7 mapped to board pins 14, 5, and 6. Here is a picture of the back of the Artemis Thing Plus. Pin 14 is labelled 0/RX1. Pins 5 and 6 are labelled as such.
 
-![Artemis Thing Plus](doc/image/sfe-atp-back.jpg)
+![Artemis Thing Plus](doc/asset/image/sfe-atp-back.jpg)
 
-For convenience, here again is the code snippet from `artemis_pca9685_initialize()` found in [artemis_pca9685.c](src/artemis_pca9685.c):
+The resulting update to `artemis_iom_module_t` in [artemis_iom.h](src/artemis_iom.h) would look like this:
+
+```C
+typedef enum e_artemis_iom_module_t
+{
+    ARTEMIS_IOM_MODULE_I2C0 = 4, // QWIIC
+    ARTEMIS_IOM_MODULE_I2C1 = 3, // Pins: 17/SCL, 16/SDA
+    ARTEMIS_IOM_MODULE_SPI0 = 0, // Pins: 13/SCK, 12/MISO, 11/MOSI
+    ARTEMIS_IOM_MODULE_SPI1 = 2  // Pins: D7/SCK, D0/MISO, D8/MOSI
+} artemis_iom_module_t;
+```
+
+The final step is to configure each of the pins to the desired function. For convenience, here again is the code snippet from `artemis_pca9685_initialize()` found in [artemis_pca9685.c](src/artemis_pca9685.c):
 
 ```C
 i2c->iom.module = ARTEMIS_IOM_MODULE_I2C0; // QWIIC
@@ -400,4 +421,4 @@ am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SCL, g_AM_BSP_GPIO_IOM4_SCL);
 am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
 ```
 
-The final two lines configure the pins on the Artemis module. The values are those we just reviewed and come straight from the `am_bsp_pins.h` file. Again, they should conform to the IOM module being used. In this case, `IOM4`, which matches the value of the enumeration `ARTEMIS_IOM_MODULE_I2C0`.
+The final two lines configure the pins on the Artemis module. The constants and variables are those we just reviewed in `am_bsp_pins.h`. Again, they should conform to the IOM module being used. In this case, `IOM4`, which matches the value of the enumeration `ARTEMIS_IOM_MODULE_I2C0`.
