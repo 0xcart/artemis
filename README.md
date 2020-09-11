@@ -172,6 +172,7 @@ Making    'bin' directory
 Compiling 'src/artemis_startup.c'
 Compiling 'src/artemis_main.c'
 Compiling 'src/artemis_cpu.c'
+Compiling 'src/artemis_watchdog.c'
 Compiling 'src/artemis_time.c'
 Compiling 'src/artemis_scheduler.c'
 Compiling 'src/artemis_task.c'
@@ -210,6 +211,7 @@ A `bin` directory is created containing the following list of output files:
 * artemis_stream.o
 * artemis_task.o
 * artemis_time.o
+* artemis_watchdog.o
 * output_svl.axf
 * output_svl.bin
 * output_svl.lst

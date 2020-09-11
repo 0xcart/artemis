@@ -14,6 +14,7 @@ extern "C" {
 typedef enum e_artemis_task_id_t
 {
     ARTEMIS_TASK_ID_LED,
+    // ARTEMIS_TASK_ID_WATCHDOG,
     ARTEMIS_TASK_ID_COUNT
 } artemis_task_id_t;
 

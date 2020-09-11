@@ -26,7 +26,9 @@ static void module_time_update(void);
 void artemis_time_initialize(void)
 {
     am_hal_stimer_int_enable(AM_HAL_STIMER_INT_OVERFLOW);
+
     NVIC_EnableIRQ(STIMER_IRQn);
+
     am_hal_stimer_config(AM_HAL_STIMER_CFG_CLEAR | AM_HAL_STIMER_CFG_FREEZE);
     am_hal_stimer_config(AM_HAL_STIMER_HFRC_3MHZ);
 }

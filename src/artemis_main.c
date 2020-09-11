@@ -24,7 +24,7 @@ int main(void)
     am_hal_sysctrl_fpu_enable();
 
     // Configure the board for low power operation
-    am_bsp_low_power_init();
+    // am_bsp_low_power_init();
 
     // Enable Single Wire Output (SWO) using Instrumentation Trace Macrocell (ITM)
     am_bsp_itm_printf_enable();
