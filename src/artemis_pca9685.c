@@ -53,7 +53,7 @@
 #define ARTEMIS_PCA9685_STEP_FULL        (4096) // signal fully on/off
 
 // application specific
-#define ARTEMIS_PCA9685_I2CBUFFER_SIZE   (32)   // bytes; must be a multiple of sizeof(uint32_t)
+#define ARTEMIS_PCA9685_I2CBUFFER_SIZE   (8)   // bytes; must be a multiple of sizeof(uint32_t)
 
 // while i2c operates on bytes the hal operates on 32-bit words
 typedef uint32_t buffer_t[ARTEMIS_PCA9685_I2CBUFFER_SIZE / sizeof(uint32_t)];

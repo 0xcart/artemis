@@ -5,7 +5,9 @@
 #include "artemis_watchdog.h"
 #include <am_bsp.h>
 
-#define ARTEMIS_WATCHDOG_LFRC_16HZ (16) // 8-bit counter; 2^8 / 16Hz = 16 second max timeout
+#define ARTEMIS_WATCHDOG_LFRC_16HZ         (16) // 8-bit counter; 2^8 / 16Hz = 16 second max timeout
+#define ARTEMIS_WATCHDOG_INTERRUPT_TIMEOUT (ARTEMIS_WATCHDOG_LFRC_16HZ * (3 / 2)) // 1.5 second interrupt timeout
+#define ARTEMIS_WATCHDOG_RESET_TIMEOUT     (ARTEMIS_WATCHDOG_LFRC_16HZ * (2)) // 2.0 second reset timeout
 
 typedef struct s_module_t
 {
@@ -26,8 +28,8 @@ void artemis_watchdog_initialize(void)
     NVIC_EnableIRQ(WDT_IRQn);
 
     module.watchdog.ui32Config = _VAL2FLD(WDT_CFG_CLKSEL, WDT_CFG_CLKSEL_16HZ) | AM_HAL_WDT_ENABLE_INTERRUPT | AM_HAL_WDT_ENABLE_RESET;
-    module.watchdog.ui16InterruptCount = ARTEMIS_WATCHDOG_LFRC_16HZ * (3 / 2); // 1.5 second interrupt timeout
-    module.watchdog.ui16ResetCount = ARTEMIS_WATCHDOG_LFRC_16HZ * (2); // 2.0 second reset timeout
+    module.watchdog.ui16InterruptCount = ARTEMIS_WATCHDOG_INTERRUPT_TIMEOUT;
+    module.watchdog.ui16ResetCount = ARTEMIS_WATCHDOG_RESET_TIMEOUT;
     am_hal_wdt_init(&module.watchdog);
 
     am_hal_wdt_start();
