@@ -2,6 +2,7 @@
 /// @file artemis_watchdog.c
 ///
 
+#include "artemis_debug.h"
 #include "artemis_watchdog.h"
 #include <am_bsp.h>
 
@@ -38,8 +39,10 @@ void artemis_watchdog_initialize(void)
 ///
 ///
 ///
-void artemis_watchdog_restart(uint64_t elapsed_us)
+void artemis_watchdog_restart(const char *name, uint64_t elapsed_us)
 {
+    ARTEMIS_DEBUG_TASKINFO(name, elapsed_us);
+
     am_hal_wdt_restart();
 }
 

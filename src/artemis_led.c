@@ -2,6 +2,7 @@
 /// @file artemis_led.c
 ///
 
+#include "artemis_debug.h"
 #include "artemis_led.h"
 #include <am_bsp.h>
 
@@ -24,8 +25,10 @@ void artemis_led_initialize(void)
 ///
 ///
 ///
-void artemis_led_toggle(uint64_t elapsed_us)
+void artemis_led_toggle(const char *name, uint64_t elapsed_us)
 {
+    ARTEMIS_DEBUG_TASKINFO(name, elapsed_us);
+
     module.state = !module.state;
 
     if (module.state) {

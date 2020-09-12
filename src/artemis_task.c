@@ -7,11 +7,11 @@
 #include "artemis_time.h"
 #include "artemis_watchdog.h"
 
-#define ARTEMIS_TASK_DEFINE_TASK(_name, _initialize, _run, _period_us) { \
+#define ARTEMIS_TASK_DEFINE_TASK(_name, _initialize, _run, _period_hz) { \
     .name = _name, \
     .initialize = _initialize, \
     .run = _run, \
-    .period_us = _period_us, \
+    .period_hz = _period_hz, \
     .previous_us = 0 \
 }
 
@@ -22,8 +22,8 @@ typedef struct s_module_t
 
 static module_t module = {
     {
-        [ARTEMIS_TASK_ID_LED] = ARTEMIS_TASK_DEFINE_TASK("LED", artemis_led_initialize, artemis_led_toggle, ARTEMIS_TIME_HZ_TO_US(2)),
-        // [ARTEMIS_TASK_ID_WATCHDOG] = ARTEMIS_TASK_DEFINE_TASK("WATCHDOG", artemis_watchdog_initialize, artemis_watchdog_restart, ARTEMIS_TIME_HZ_TO_US(1))
+        [ARTEMIS_TASK_ID_LED] = ARTEMIS_TASK_DEFINE_TASK("LED", artemis_led_initialize, artemis_led_toggle, 2),
+        // [ARTEMIS_TASK_ID_WATCHDOG] = ARTEMIS_TASK_DEFINE_TASK("WATCHDOG", artemis_watchdog_initialize, artemis_watchdog_restart, 1)
     }
 };
 

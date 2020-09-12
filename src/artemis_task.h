@@ -20,10 +20,10 @@ typedef enum e_artemis_task_id_t
 
 typedef struct s_artemis_task_t
 {
-    char *name;
+    const char *name;
     void (*initialize)(void);
-    void (*run)(uint64_t elapsed_us);
-    uint64_t period_us;
+    void (*run)(const char *name, uint64_t elapsed_us);
+    uint16_t period_hz;
     uint64_t previous_us;
 } artemis_task_t;
 
