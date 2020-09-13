@@ -53,10 +53,9 @@
 #define ARTEMIS_PCA9685_STEP_FULL        (4096) // signal fully on/off
 
 // application specific
-#define ARTEMIS_PCA9685_I2CBUFFER_SIZE   (8)   // bytes; must be a multiple of sizeof(uint32_t)
+#define ARTEMIS_PCA9685_I2CBUFFER_LENGTH (8)    // transmit and receive buffer length
 
-// while i2c operates on bytes the hal operates on 32-bit words
-typedef uint32_t buffer_t[ARTEMIS_PCA9685_I2CBUFFER_SIZE / sizeof(uint32_t)];
+typedef uint8_t buffer_t[ARTEMIS_PCA9685_I2CBUFFER_LENGTH];
 
 typedef struct s_module_t
 {
@@ -89,7 +88,6 @@ void artemis_pca9685_initialize(uint16_t frequency)
 
     module_pca9685_reset();
     module_pca9685_setfrequency(frequency);
-    module_pca9685_reset();
 }
 
 ///
@@ -99,7 +97,7 @@ void artemis_pca9685_setpwm(uint8_t pin, uint16_t value, bool invert)
 {
     uint16_t on;
     uint16_t off;
-    artemis_stream_t txstream;
+    artemis_stream_t txstream = {0};
 
     value = ARTEMIS_MATH_MIN(value, ARTEMIS_PCA9685_STEP_MAXIMUM);
 
@@ -132,7 +130,7 @@ void artemis_pca9685_setpwm(uint8_t pin, uint16_t value, bool invert)
         }
     }
 
-    artemis_stream_setbuffer(&txstream, (uint8_t *)module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_SIZE);
+    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_LENGTH);
     artemis_stream_put(&txstream, ARTEMIS_PCA9685_REG_LED0_ON_L + (pin * 4));
     artemis_stream_put(&txstream, on);
     artemis_stream_put(&txstream, on >> 8);
@@ -146,9 +144,9 @@ void artemis_pca9685_setpwm(uint8_t pin, uint16_t value, bool invert)
 ///
 static void module_pca9685_reset(void)
 {
-    artemis_stream_t txstream;
+    artemis_stream_t txstream = {0};
 
-    artemis_stream_setbuffer(&txstream, (uint8_t *)module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_SIZE);
+    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_LENGTH);
     artemis_stream_put(&txstream, ARTEMIS_PCA9685_REG_MODE1);
     artemis_stream_put(&txstream, ARTEMIS_PCA9685_MODE1_RESTART);
     artemis_i2c_send(&module.i2c, &txstream);
@@ -164,16 +162,16 @@ static void module_pca9685_setfrequency(uint16_t frequency)
     uint8_t prescale;
     uint8_t oldmode = 0;
     uint8_t newmode = 0;
-    artemis_stream_t txstream;
-    artemis_stream_t rxstream;
+    artemis_stream_t txstream = {0};
+    artemis_stream_t rxstream = {0};
 
     prescale = (uint8_t)(((ARTEMIS_PCA9685_OSCILLATOR_FREQ / (frequency * 4096.0f)) + 0.5f) - 1.0f);
 
-    artemis_stream_setbuffer(&txstream, (uint8_t *)module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_SIZE);
+    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_LENGTH);
     artemis_stream_put(&txstream, ARTEMIS_PCA9685_REG_MODE1);
     artemis_i2c_send(&module.i2c, &txstream);
 
-    artemis_stream_setbuffer(&rxstream, (uint8_t *)module.rxbuffer, ARTEMIS_PCA9685_I2CBUFFER_SIZE);
+    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_PCA9685_I2CBUFFER_LENGTH);
     artemis_i2c_receive(&module.i2c, &rxstream, 1);
     artemis_stream_get(&rxstream, &oldmode);
 
@@ -192,7 +190,7 @@ static void module_pca9685_setfrequency(uint16_t frequency)
 
     artemis_stream_reset(&txstream);
     artemis_stream_put(&txstream, ARTEMIS_PCA9685_REG_MODE1);
-    artemis_stream_put(&txstream, oldmode);
+    artemis_stream_put(&txstream, oldmode | ARTEMIS_PCA9685_MODE1_RESTART | ARTEMIS_PCA9685_MODE1_AI);
     artemis_i2c_send(&module.i2c, &txstream);
 
     artemis_time_delayus(500);

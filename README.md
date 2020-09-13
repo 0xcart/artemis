@@ -59,7 +59,6 @@ Click on `Edit in settings.json` which will open the `settings.json` document. U
 
 ```json
 {
-  "editor.tabSize": 2,
   "editor.wordWrapColumn": 120,
   "cortex-debug.JLinkGDBServerPath": "C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe",
   "cortex-debug.armToolchainPath": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/9 2020-q2-update/bin",
@@ -176,6 +175,7 @@ Compiling 'src/artemis_watchdog.c'
 Compiling 'src/artemis_time.c'
 Compiling 'src/artemis_scheduler.c'
 Compiling 'src/artemis_task.c'
+Compiling 'src/artemis_core.c'
 Compiling 'src/artemis_led.c'
 Compiling 'src/artemis_iom.c'
 Compiling 'src/artemis_i2c.c'
@@ -198,6 +198,7 @@ A `bin` directory is created containing the following list of output files:
 * am_devices_led.o
 * am_util_delay.o
 * am_util_stdio.o
+* artemis_core.o
 * artemis_cpu.o
 * artemis_i2c.o
 * artemis_iom.o
@@ -230,16 +231,18 @@ phase:  setup
         Sending 'enter bootloader' command
 
 phase:  bootload
-        have 9640 bytes to send in 5 frames
+        have 14048 bytes to send in 7 frames
         sending frame #1, length: 2048
         sending frame #2, length: 2048
         sending frame #3, length: 2048
         sending frame #4, length: 2048
-        sending frame #5, length: 1448
+        sending frame #5, length: 2048
+        sending frame #6, length: 2048
+        sending frame #7, length: 1760
 
         Upload complete
 
-        Nominal bootload bps: 37956.33
+        Nominal bootload bps: 38750.25
 ```
 
 ### Debug

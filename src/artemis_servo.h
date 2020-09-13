@@ -12,6 +12,11 @@
 extern "C" {
 #endif
 
+#define ARTEMIS_SERVO_PWM_FREQUENCY (50)
+#define ARTEMIS_SERVO_PULSE_MINIMUM (204)
+#define ARTEMIS_SERVO_PULSE_MAXIMUM (408)
+#define ARTEMIS_SERVO_PULSE_CENTER  (306)
+
 typedef enum e_artemis_servo_index_t
 {
     ARTEMIS_SERVO_INDEX_HIPX_R,
@@ -39,6 +44,8 @@ typedef struct s_artemis_servo_t
 } artemis_servo_t;
 
 void artemis_servo_initialize(void);
+void artemis_servo_update(void);
+artemis_servo_t *artemis_servo_get(artemis_servo_index_t index);
 
 #ifdef __cplusplus
 }

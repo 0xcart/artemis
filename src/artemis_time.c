@@ -104,7 +104,7 @@ static void module_time_update(void)
 }
 
 ///
-/// Define stimer interrupt; see artemis_startup.c
+/// Define stimer overflow interrupt; see artemis_startup.c
 ///
 void am_stimer_isr(void)
 {
