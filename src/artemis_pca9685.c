@@ -46,8 +46,8 @@
 #define ARTEMIS_PCA9685_MODE2_OUTNE01    (0x01) // LEDn = 1 when OUTDRV = 1; LEDn = high-impedance when OUTDRV = 0 (same as OUTNE10)
 
 // PCA9685 attributes
-#define ARTEMIS_PCA9685_I2C_ADDRESS      (0x40)
-#define ARTEMIS_PCA9685_OSCILLATOR_FREQ  (25000000)
+#define ARTEMIS_PCA9685_I2C_ADDRESS      (0x40) // I2C default address for the Adafruit board
+#define ARTEMIS_PCA9685_OSCILLATOR_FREQ  (25730000) // calibrated with an oscilloscope for this specific pca9685 chip
 #define ARTEMIS_PCA9685_STEP_MINIMUM     (0)    // 12-bit resolution (0 to 4095)
 #define ARTEMIS_PCA9685_STEP_MAXIMUM     (4095) // 12-bit resolution (0 to 4095)
 #define ARTEMIS_PCA9685_STEP_FULL        (4096) // signal fully on/off
