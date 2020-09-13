@@ -46,7 +46,7 @@
 @set BLD_AR=%BLD_TOOLCHAIN%-ar
 @set BLD_OUTPUT=output
 @set BLD_INCLUDE=-I%BLD_SRCPATH% -I%BLD_BOARDPATH%/bsp -I%BLD_SDKPATH%/utils -I%BLD_SDKPATH%/devices -I%BLD_SDKPATH%/mcu/%BLD_MCU% -I%BLD_SDKPATH%/CMSIS/AmbiqMicro/Include -I%BLD_SDKPATH%/CMSIS/ARM/Include
-@set BLD_SOURCE=src/artemis_startup.c src/artemis_main.c src/artemis_cpu.c src/artemis_watchdog.c src/artemis_time.c src/artemis_scheduler.c src/artemis_task.c src/artemis_core.c src/artemis_led.c src/artemis_iom.c src/artemis_i2c.c src/artemis_spi.c src/artemis_stream.c src/artemis_pca9685.c src/artemis_servo.c %BLD_SDKPATH%/devices/am_devices_led.c %BLD_SDKPATH%/utils/am_util_delay.c %BLD_SDKPATH%/utils/am_util_stdio.c
+@set BLD_SOURCE=src/artemis_startup.c src/artemis_main.c src/artemis_mcu.c src/artemis_debug.c src/artemis_watchdog.c src/artemis_time.c src/artemis_scheduler.c src/artemis_task.c src/artemis_core.c src/artemis_led.c src/artemis_iom.c src/artemis_i2c.c src/artemis_spi.c src/artemis_stream.c src/artemis_pca9685.c src/artemis_servo.c %BLD_SDKPATH%/devices/am_devices_led.c %BLD_SDKPATH%/utils/am_util_delay.c %BLD_SDKPATH%/utils/am_util_stdio.c
 @set BLD_LIBRARY=%BLD_BOARDPATH%/bsp/gcc/bin/libam_bsp.a %BLD_SDKPATH%/mcu/%BLD_MCU%/hal/gcc/bin/libam_hal.a
 @set BLD_DEFINE=-DPART_%BLD_PART% -DAM_PART_%BLD_PART% -DAM_CUSTOM_BDADDR -DAM_PACKAGE_BGA -DAM_DEBUG_PRINTF -DWSF_TRACE_ENABLED
 @set BLD_CCFLAG=-mthumb -mcpu=%BLD_CPU% -mfpu=%BLD_FPU% -mfloat-abi=%BLD_FABI% -ffunction-sections -fdata-sections -std=c99 -Wall -g -O0 %BLD_DEFINE% %BLD_INCLUDE%

@@ -47,7 +47,7 @@ void artemis_watchdog_restart(const char *name, uint64_t elapsed_us)
 }
 
 ///
-/// Define watchdog interrupt; see artemis_startup.c
+/// define watchdog interrupt; see artemis_startup.c
 ///
 void am_watchdog_isr(void)
 {

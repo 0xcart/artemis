@@ -19,6 +19,8 @@ extern "C" {
     #define ARTEMIS_DEBUG_TASKINFO(_name, _elapsed_us) (am_util_stdio_printf("%s: %llu\n", _name, _elapsed_us))
 #endif
 
+void artemis_debug_initialize(void);
+
 #ifdef __cplusplus
 }
 #endif

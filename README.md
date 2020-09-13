@@ -170,7 +170,8 @@ To build the project select `svl binary`. You should see the following printed t
 Making    'bin' directory
 Compiling 'src/artemis_startup.c'
 Compiling 'src/artemis_main.c'
-Compiling 'src/artemis_cpu.c'
+Compiling 'src/artemis_mcu.c'
+Compiling 'src/artemis_debug.c'
 Compiling 'src/artemis_watchdog.c'
 Compiling 'src/artemis_time.c'
 Compiling 'src/artemis_scheduler.c'
@@ -199,11 +200,12 @@ A `bin` directory is created containing the following list of output files:
 * am_util_delay.o
 * am_util_stdio.o
 * artemis_core.o
-* artemis_cpu.o
+* artemis_debug.o
 * artemis_i2c.o
 * artemis_iom.o
 * artemis_led.o
 * artemis_main.o
+* artemis_mcu.o
 * artemis_pca9685.o
 * artemis_scheduler.o
 * artemis_servo.o
@@ -231,18 +233,18 @@ phase:  setup
         Sending 'enter bootloader' command
 
 phase:  bootload
-        have 14048 bytes to send in 7 frames
+        have 14056 bytes to send in 7 frames
         sending frame #1, length: 2048
         sending frame #2, length: 2048
         sending frame #3, length: 2048
         sending frame #4, length: 2048
         sending frame #5, length: 2048
         sending frame #6, length: 2048
-        sending frame #7, length: 1760
+        sending frame #7, length: 1768
 
         Upload complete
 
-        Nominal bootload bps: 38750.25
+        Nominal bootload bps: 39294.83
 ```
 
 ### Debug
