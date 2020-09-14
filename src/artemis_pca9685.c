@@ -47,7 +47,7 @@
 
 // PCA9685 attributes
 #define ARTEMIS_PCA9685_I2C_ADDRESS      (0x40) // I2C default address for the Adafruit board
-#define ARTEMIS_PCA9685_OSCILLATOR_FREQ  (25730000) // calibrated with an oscilloscope for this specific pca9685 chip
+#define ARTEMIS_PCA9685_OSCILLATOR_FREQ  (25703000) // calibrated with an oscilloscope for this specific pca9685 chip
 #define ARTEMIS_PCA9685_STEP_MINIMUM     (0)    // 12-bit resolution (0 to 4095)
 #define ARTEMIS_PCA9685_STEP_MAXIMUM     (4095) // 12-bit resolution (0 to 4095)
 #define ARTEMIS_PCA9685_STEP_FULL        (4096) // signal fully on/off

@@ -10,11 +10,11 @@
 
 typedef struct s_module_t
 {
-    bool state;
+    bool increment;
     uint16_t value;
 } module_t;
 
-static module_t module = {.state = true, .value = ARTEMIS_SERVO_PULSE_MINIMUM};
+static module_t module = {.increment = true, .value = ARTEMIS_SERVO_PULSE_MINIMUM};
 
 ///
 ///
@@ -33,18 +33,21 @@ void artemis_core_update(const char *name, uint64_t elapsed_us)
 
     ARTEMIS_DEBUG_TASKINFO(name, elapsed_us);
 
-    servo = artemis_servo_get(0);
-    servo->value = module.value;
+    for (size_t i = 0; i < ARTEMIS_SERVO_INDEX_COUNT; i++) {
+        servo = artemis_servo_get(i);
+        servo->value = module.value;
+    }
+
     artemis_servo_update();
 
-    if (module.state) {
+    if (module.increment) {
         if (++module.value >= ARTEMIS_SERVO_PULSE_MAXIMUM) {
-            module.state = false;
+            module.increment = false;
         }
     }
     else {
         if (--module.value <= ARTEMIS_SERVO_PULSE_MINIMUM) {
-            module.state = true;
+            module.increment = true;
         }
     }
 }

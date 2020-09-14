@@ -12,10 +12,10 @@
 extern "C" {
 #endif
 
-#define ARTEMIS_SERVO_PWM_FREQUENCY (50)
-#define ARTEMIS_SERVO_PULSE_MINIMUM (204)
-#define ARTEMIS_SERVO_PULSE_MAXIMUM (408)
-#define ARTEMIS_SERVO_PULSE_CENTER  (306)
+#define ARTEMIS_SERVO_PWM_FREQUENCY (50)  // 50Hz
+#define ARTEMIS_SERVO_PULSE_MINIMUM (164) // =  800us ÷ ((1000000us/s ÷ 50Hz) ÷ 4096)
+#define ARTEMIS_SERVO_PULSE_MAXIMUM (450) // = 2200us ÷ ((1000000us/s ÷ 50Hz) ÷ 4096)
+#define ARTEMIS_SERVO_PULSE_CENTER  (307) // = 1500us ÷ ((1000000us/s ÷ 50Hz) ÷ 4096)
 
 typedef enum e_artemis_servo_index_t
 {
