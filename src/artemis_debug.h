@@ -14,9 +14,11 @@ extern "C" {
 #endif
 
 #ifdef ARTEMIS_NDEBUG
+    #define ARTEMIS_DEBUG_PRINTF(...) ((void)0)
     #define ARTEMIS_DEBUG_TASKINFO(_name, _elapsed_us) ((void)0)
 #else
-    #define ARTEMIS_DEBUG_TASKINFO(_name, _elapsed_us) (am_util_stdio_printf("%s: %llu\n", _name, _elapsed_us))
+    #define ARTEMIS_DEBUG_PRINTF(...) (am_util_stdio_printf(__VA_ARGS__))
+    #define ARTEMIS_DEBUG_TASKINFO(_name, _elapsed_us) (am_util_stdio_printf("%s:\t\t%llu\n", _name, _elapsed_us))
 #endif
 
 void artemis_debug_initialize(void);

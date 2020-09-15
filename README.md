@@ -262,14 +262,14 @@ Launching GDB: "C:\Program Files (x86)\GNU Arm Embedded Toolchain\9 2020-q2-upda
 undefinedC:\Program Files (x86)\GNU Arm Embedded Toolchain\9 2020-q2-update\bin\arm-none-eabi-gdb.exe: warning: Couldn't determine a path for the index cache directory.
 Reading symbols from C:\Solutions\artemis/bin/output_svl.axf...
 main () at src/artemis_main.c:17
-17      am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
+17      artemis_mcu_initialize();
 Not implemented stop reason (assuming exception): undefined
 Resetting target
 Resetting target
 SWO enabled successfully.
 
 Temporary breakpoint 1, main () at src/artemis_main.c:17
-17      am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
+17      artemis_mcu_initialize();
 ```
 
 At the top of Visual Studio Code you'll find a popup dialog with Debug buttons that include `Continue`, `Step Over`, `Step Into`, `Step Out`, etc.:
@@ -304,10 +304,10 @@ In the drop down menu on the right (the selection is currently `Adapter Output`)
 You should see the following (or similar) printed to the `OUTPUT` tab:
 
 ```shell
-[2020-08-27T19:45:44.753Z]   Test artemis SWO
+[2020-08-27T19:45:44.753Z]   SWO ENABLED
 ```
 
-This verifies functions like `am_util_stdio_printf()` are working properly (see src/main.c:31).
+This verifies functions like `am_util_stdio_printf()` are working properly.
 
 ### Clean
 
