@@ -38,7 +38,7 @@ void artemis_scheduler_run(void)
             current_us = artemis_time_getus();
             elapsed_us = current_us - task->previous_us;
 
-            if (!task->period_hz || (elapsed_us >= ARTEMIS_TIME_HZ_TO_US(task->period_hz))) {
+            if (elapsed_us >= ARTEMIS_TIME_HZ_TO_US(task->period_hz)) {
                 task->previous_us = current_us;
                 task->run(task->name, elapsed_us);
             }

@@ -11,8 +11,17 @@
 extern "C" {
 #endif
 
-#define ARTEMIS_TIME_HZ_TO_US(_hz) (1000000 / _hz)
-#define ARTEMIS_TIME_HZ_TO_MS(_hz) (1000 / _hz)
+#define ARTEMIS_TIME_HZ_TO_US(hz) \
+(__extension__({ \
+    __typeof__(hz) _hz = (hz); \
+    (_hz > 0) ? (1000000 / _hz) : 0; \
+}))
+
+#define ARTEMIS_TIME_HZ_TO_MS(hz) \
+(__extension__({ \
+    __typeof__(hz) _hz = (hz); \
+    (_hz > 0) ? (1000 / _hz) : 0; \
+}))
 
 void artemis_time_initialize(void);
 uint64_t artemis_time_get(void);
