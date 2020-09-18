@@ -2,6 +2,7 @@
 /// @file artemis_servo.c
 ///
 
+#include "artemis_debug.h"
 #include "artemis_pca9685.h"
 #include "artemis_servo.h"
 #include <stddef.h>
@@ -35,9 +36,11 @@ void artemis_servo_initialize(void)
 ///
 ///
 ///
-void artemis_servo_update(void)
+void artemis_servo_update(const char *name, uint64_t elapsed_us)
 {
     artemis_servo_t *servo;
+
+    ARTEMIS_DEBUG_TASKINFO(name, elapsed_us);
 
     for (size_t i = 0; i < ARTEMIS_SERVO_INDEX_COUNT; i++) {
         servo = &module.servos[i];

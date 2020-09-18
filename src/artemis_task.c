@@ -4,6 +4,7 @@
 
 #include "artemis_core.h"
 #include "artemis_led.h"
+#include "artemis_servo.h"
 #include "artemis_task.h"
 #include "artemis_time.h"
 #include "artemis_watchdog.h"
@@ -24,6 +25,7 @@ typedef struct s_module_t
 static module_t module = {
     {
         [ARTEMIS_TASK_ID_CORE] = ARTEMIS_TASK_DEFINE_TASK("CORE", artemis_core_initialize, artemis_core_update, 100),
+        [ARTEMIS_TASK_ID_SERVO] = ARTEMIS_TASK_DEFINE_TASK("SERVO", artemis_servo_initialize, artemis_servo_update, 100),
         [ARTEMIS_TASK_ID_LED] = ARTEMIS_TASK_DEFINE_TASK("LED", artemis_led_initialize, artemis_led_toggle, 2),
         // [ARTEMIS_TASK_ID_WATCHDOG] = ARTEMIS_TASK_DEFINE_TASK("WATCHDOG", artemis_watchdog_initialize, artemis_watchdog_restart, 1)
     }

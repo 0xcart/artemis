@@ -21,7 +21,6 @@ static module_t module = {.increment = true, .value = ARTEMIS_SERVO_PULSE_MINIMU
 ///
 void artemis_core_initialize(void)
 {
-    artemis_servo_initialize();
 }
 
 ///
@@ -37,8 +36,6 @@ void artemis_core_update(const char *name, uint64_t elapsed_us)
         servo = artemis_servo_get(i);
         servo->value = module.value;
     }
-
-    artemis_servo_update();
 
     if (module.increment) {
         if (++module.value >= ARTEMIS_SERVO_PULSE_MAXIMUM) {
