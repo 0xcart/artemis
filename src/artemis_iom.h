@@ -18,6 +18,11 @@ typedef enum e_artemis_iom_module_t
     ARTEMIS_IOM_MODULE_SPI0 = 0  // Pins: 13/SCK, 12/MISO, 11/MOSI
 } artemis_iom_module_t;
 
+typedef enum e_artemis_iom_chipselect_t
+{
+    ARTEMIS_IOM_CHIPSELECT_SPI0 = 0 // Pin: A2/CS
+} artemis_iom_chipselect_t;
+
 typedef struct s_artemis_iom_t
 {
     void *handle;

@@ -184,6 +184,8 @@ Compiling 'src/artemis_spi.c'
 Compiling 'src/artemis_stream.c'
 Compiling 'src/artemis_pca9685.c'
 Compiling 'src/artemis_servo.c'
+Compiling 'src/artemis_icm20649.c'
+Compiling 'src/artemis_imu.c'
 Compiling 'AmbiqSuiteSDK/devices/am_devices_led.c'
 Compiling 'AmbiqSuiteSDK/utils/am_util_delay.c'
 Compiling 'AmbiqSuiteSDK/utils/am_util_stdio.c'
@@ -202,6 +204,8 @@ A `bin` directory is created containing the following list of output files:
 * artemis_core.o
 * artemis_debug.o
 * artemis_i2c.o
+* artemis_icm20649.o
+* artemis_imu.o
 * artemis_iom.o
 * artemis_led.o
 * artemis_main.o
@@ -233,18 +237,19 @@ phase:  setup
         Sending 'enter bootloader' command
 
 phase:  bootload
-        have 14056 bytes to send in 7 frames
+        have 14376 bytes to send in 8 frames
         sending frame #1, length: 2048
         sending frame #2, length: 2048
         sending frame #3, length: 2048
         sending frame #4, length: 2048
         sending frame #5, length: 2048
         sending frame #6, length: 2048
-        sending frame #7, length: 1768
+        sending frame #7, length: 2048
+        sending frame #8, length: 40
 
         Upload complete
 
-        Nominal bootload bps: 39294.83
+        Nominal bootload bps: 37136.71
 ```
 
 ### Debug

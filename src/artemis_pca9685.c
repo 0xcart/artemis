@@ -79,7 +79,7 @@ void artemis_pca9685_initialize(uint16_t frequency)
     i2c->address = ARTEMIS_PCA9685_I2C_ADDRESS;
     i2c->stop = true;
 
-    i2c->iom.module = ARTEMIS_IOM_MODULE_I2C0; // QWIIC
+    i2c->iom.module = ARTEMIS_IOM_MODULE_I2C0;
     i2c->iom.config.eInterfaceMode = AM_HAL_IOM_I2C_MODE;
     i2c->iom.config.ui32ClockFreq = AM_HAL_IOM_400KHZ;
     artemis_iom_initialize(&i2c->iom);

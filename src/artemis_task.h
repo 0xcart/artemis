@@ -13,6 +13,7 @@ extern "C" {
 
 typedef enum e_artemis_task_id_t
 {
+    ARTEMIS_TASK_ID_IMU,
     ARTEMIS_TASK_ID_CORE,
     ARTEMIS_TASK_ID_SERVO,
     ARTEMIS_TASK_ID_LED,

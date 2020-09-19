@@ -7,6 +7,7 @@
 
 #include "artemis_iom.h"
 #include "artemis_stream.h"
+#include "artemis_util.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -14,15 +15,10 @@
 extern "C" {
 #endif
 
-typedef enum s_artemis_spi_bitorder_t
-{
-    ARTEMIS_SPI_BITORDER_MSB,
-    ARTEMIS_SPI_BITORDER_LSB
-} artemis_spi_bitorder_t;
-
 typedef struct s_artemis_spi_t
 {
-    artemis_spi_bitorder_t bitorder;
+    artemis_util_bitorder_t bitorder;
+    artemis_iom_chipselect_t chipselect;
     artemis_iom_t iom;
 } artemis_spi_t;
 
