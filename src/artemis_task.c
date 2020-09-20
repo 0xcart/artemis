@@ -24,7 +24,7 @@ typedef struct s_module_t
 
 static module_t module = {
     {
-        [ARTEMIS_TASK_ID_IMU] = ARTEMIS_TASK_DEFINE_TASK("IMU", artemis_imu_initialize, artemis_imu_update, 500),
+        [ARTEMIS_TASK_ID_IMU] = ARTEMIS_TASK_DEFINE_TASK("IMU", artemis_imu_initialize, artemis_imu_update, 200),
         [ARTEMIS_TASK_ID_CORE] = ARTEMIS_TASK_DEFINE_TASK("CORE", artemis_core_initialize, artemis_core_update, 100),
         [ARTEMIS_TASK_ID_SERVO] = ARTEMIS_TASK_DEFINE_TASK("SERVO", artemis_servo_initialize, artemis_servo_update, 50),
         [ARTEMIS_TASK_ID_LED] = ARTEMIS_TASK_DEFINE_TASK("LED", artemis_led_initialize, artemis_led_toggle, 2),

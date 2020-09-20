@@ -28,7 +28,7 @@
 #define ARTEMIS_PCA9685_REG_PRESCALE     (0xFE) // prescaler for PWM output frequency
 #define ARTEMIS_PCA9685_REG_TESTMODE     (0xFF) // defines the test mode to be entered
 
-// PCA9685 mode 1
+// PCA9685 mode 1 bit masks
 #define ARTEMIS_PCA9685_MODE1_RESTART    (0x80) // restart enabled
 #define ARTEMIS_PCA9685_MODE1_EXTCLK     (0x40) // use EXTCLK pin clock
 #define ARTEMIS_PCA9685_MODE1_AI         (0x20) // register Auto-Increment enabled
@@ -38,7 +38,7 @@
 #define ARTEMIS_PCA9685_MODE1_SUB3       (0x02) // PCA9685 responds to I2C-bus subaddress 3
 #define ARTEMIS_PCA9685_MODE1_ALLCALL    (0x01) // PCA9685 responds to LED All Call I2C-bus address
 
-// PCA9685 mode 2
+// PCA9685 mode 2 bit masks
 #define ARTEMIS_PCA9685_MODE2_INVRT      (0x10) // output logic state inverted
 #define ARTEMIS_PCA9685_MODE2_OCH        (0x08) // outputs change on ACK instead of STOP
 #define ARTEMIS_PCA9685_MODE2_OUTDRV     (0x04) // the 16 LEDn outputs are configured with a totem pole structure
