@@ -83,6 +83,7 @@ void artemis_pca9685_initialize(uint16_t frequency)
     i2c->iom.config.eInterfaceMode = AM_HAL_IOM_I2C_MODE;
     i2c->iom.config.ui32ClockFreq = AM_HAL_IOM_400KHZ;
     artemis_iom_initialize(&i2c->iom);
+
     am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SCL, g_AM_BSP_GPIO_IOM4_SCL);
     am_hal_gpio_pinconfig(AM_BSP_GPIO_IOM4_SDA, g_AM_BSP_GPIO_IOM4_SDA);
 

@@ -7,7 +7,6 @@
 
 #include "artemis_iom.h"
 #include "artemis_stream.h"
-#include "artemis_util.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -15,10 +14,12 @@
 extern "C" {
 #endif
 
+#define ARTEMIS_SPI_READBIT_MSB (0x80)
+#define ARTEMIS_SPI_READBIT_LSB (0x01)
+
 typedef struct s_artemis_spi_t
 {
-    artemis_util_bitorder_t bitorder;
-    artemis_iom_chipselect_t chipselect;
+    uint32_t chipselect;
     artemis_iom_t iom;
 } artemis_spi_t;
 
