@@ -43,7 +43,7 @@
 #define ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_30  (0x06) // accel full scale select: ±30g
 
 // ICM20649 attributes
-#define ARTEMIS_ICM20649_WHO_AM_I               (0xE1) // ICM20649 identifier
+#define ARTEMIS_ICM20649_IDENTITY               (0xE1) // ICM20649 identity
 #define ARTEMIS_ICM20649_SCLK_FREQ              (7000000) // SPI SCLK frequency
 
 // application specific

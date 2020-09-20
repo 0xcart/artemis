@@ -16,7 +16,7 @@ extern "C" {
 #define ARTEMIS_UTIL_OFFSET(s, m)     (offsetof(s, m))
 #define ARTEMIS_UTIL_OFFSET_PTR(s, m) ((uint8_t*)0 + offsetof(s, m))
 
-typedef enum s_artemis_util_bitorder_t
+typedef enum e_artemis_util_bitorder_t
 {
     ARTEMIS_UTIL_BITORDER_MSB,
     ARTEMIS_UTIL_BITORDER_LSB
