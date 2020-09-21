@@ -40,11 +40,12 @@
 #define ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_8   (0x02) // accel full scale select: ±8g
 #define ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_16  (0x04) // accel full scale select: ±16g
 #define ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_30  (0x06) // accel full scale select: ±30g
+#define ARTEMIS_ICM20649_BANK2_ACCEL_FCHOICE    (0x01) // enable accel DLPF
 #define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_500  (0x00) // gyro full scale select: ±500 dps
 #define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_1000 (0x02) // gyro full scale select: ±1000 dps
 #define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_2000 (0x04) // gyro full scale select: ±2000 dps
 #define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_4000 (0x06) // gyro full scale select: ±4000 dps
-#define ARTEMIS_ICM20649_BANK2_GYRO_FCHOICE     (0x01) // enable gryo DLPF
+#define ARTEMIS_ICM20649_BANK2_GYRO_FCHOICE     (0x01) // enable gyro DLPF
 
 // ICM20649 attributes
 #define ARTEMIS_ICM20649_IDENTITY               (0xE1) // ICM20649 identity
@@ -184,7 +185,7 @@ static void module_icm20649_configure(void)
     // accel configuration
     artemis_stream_reset(&txstream);
     artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_ACCEL_CONFIG);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_16);
+    artemis_stream_put(&txstream, ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_16 | ARTEMIS_ICM20649_BANK2_ACCEL_FCHOICE);
     artemis_spi_send(&module.spi, &txstream);
 
     // gyro sample rate divider
