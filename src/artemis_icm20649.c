@@ -144,7 +144,7 @@ static void module_icm20649_identity(void)
     artemis_spi_transfer(&module.spi, &txstream, &rxstream);
     artemis_stream_get(&rxstream, &identity);
 
-    ARTEMIS_DEBUG_PRINTF("ICM20649 IDENTITY:\t%#04X\n", identity);
+    ARTEMIS_DEBUG_PRINTF("ICM20649 IDENTITY:\t0x%02X\n", identity);
 }
 
 ///
