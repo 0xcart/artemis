@@ -7,12 +7,12 @@
 ///
 ///
 ///
-bool artemis_spi_send(artemis_spi_t *spi, artemis_stream_t *txstream)
+bool artemis_spi_send(artemis_spi_t *spi, bool stop, artemis_stream_t *txstream)
 {
     am_hal_iom_transfer_t transfer = {0};
 
     transfer.uPeerInfo.ui32SpiChipSelect = spi->chipselect;
-    transfer.bContinue = false;
+    transfer.bContinue = !stop;
     transfer.pui32TxBuffer = (uint32_t *)txstream->buffer;
     transfer.ui32NumBytes = txstream->written;
     transfer.eDirection = AM_HAL_IOM_TX;
@@ -31,12 +31,12 @@ bool artemis_spi_send(artemis_spi_t *spi, artemis_stream_t *txstream)
 ///
 ///
 ///
-bool artemis_spi_receive(artemis_spi_t *spi, artemis_stream_t *rxstream, uint32_t rxnumber)
+bool artemis_spi_receive(artemis_spi_t *spi, bool stop, artemis_stream_t *rxstream, uint32_t rxnumber)
 {
     am_hal_iom_transfer_t transfer = {0};
 
     transfer.uPeerInfo.ui32SpiChipSelect = spi->chipselect;
-    transfer.bContinue = false;
+    transfer.bContinue = !stop;
     transfer.pui32RxBuffer = (uint32_t *)rxstream->buffer;
     transfer.ui32NumBytes = rxnumber;
     transfer.eDirection = AM_HAL_IOM_RX;
@@ -55,12 +55,12 @@ bool artemis_spi_receive(artemis_spi_t *spi, artemis_stream_t *rxstream, uint32_
 ///
 ///
 ///
-bool artemis_spi_transfer(artemis_spi_t *spi, artemis_stream_t *txstream, artemis_stream_t *rxstream)
+bool artemis_spi_transfer(artemis_spi_t *spi, bool stop, artemis_stream_t *txstream, artemis_stream_t *rxstream)
 {
     am_hal_iom_transfer_t transfer = {0};
 
     transfer.uPeerInfo.ui32SpiChipSelect = spi->chipselect;
-    transfer.bContinue = false;
+    transfer.bContinue = !stop;
     transfer.pui32TxBuffer = (uint32_t *)txstream->buffer;
     transfer.pui32RxBuffer = (uint32_t *)rxstream->buffer;
     transfer.ui32NumBytes = txstream->written;

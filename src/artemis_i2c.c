@@ -7,12 +7,12 @@
 ///
 ///
 ///
-bool artemis_i2c_send(artemis_i2c_t *i2c, artemis_stream_t *txstream)
+bool artemis_i2c_send(artemis_i2c_t *i2c, bool stop, artemis_stream_t *txstream)
 {
     am_hal_iom_transfer_t transfer = {0};
 
     transfer.uPeerInfo.ui32I2CDevAddr = i2c->address;
-    transfer.bContinue = !i2c->stop;
+    transfer.bContinue = !stop;
     transfer.pui32TxBuffer = (uint32_t *)txstream->buffer;
     transfer.ui32NumBytes = txstream->written;
     transfer.eDirection = AM_HAL_IOM_TX;
@@ -31,12 +31,12 @@ bool artemis_i2c_send(artemis_i2c_t *i2c, artemis_stream_t *txstream)
 ///
 ///
 ///
-bool artemis_i2c_receive(artemis_i2c_t *i2c, artemis_stream_t *rxstream, uint32_t rxnumber)
+bool artemis_i2c_receive(artemis_i2c_t *i2c, bool stop, artemis_stream_t *rxstream, uint32_t rxnumber)
 {
     am_hal_iom_transfer_t transfer = {0};
 
     transfer.uPeerInfo.ui32I2CDevAddr = i2c->address;
-    transfer.bContinue = !i2c->stop;
+    transfer.bContinue = !stop;
     transfer.pui32RxBuffer = (uint32_t *)rxstream->buffer;
     transfer.ui32NumBytes = rxnumber;
     transfer.eDirection = AM_HAL_IOM_RX;
