@@ -19,7 +19,7 @@ extern "C" {
 
 typedef struct s_artemis_spi_t
 {
-    uint32_t chipselect;
+    uint8_t chipselect;
     artemis_iom_t iom;
 } artemis_spi_t;
 

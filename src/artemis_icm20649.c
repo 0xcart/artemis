@@ -6,6 +6,7 @@
 #include "artemis_icm20649.h"
 #include "artemis_spi.h"
 #include "artemis_time.h"
+#include <stddef.h>
 
 // ICM20649 bank select register
 #define ARTEMIS_ICM20649_REG_BANK_SELECT        (0x7F) // bank select
@@ -67,10 +68,11 @@ typedef struct s_module_t
 
 static module_t module;
 
-static void module_icm20649_bank(uint8_t bank);
 static void module_icm20649_reset(void);
 static void module_icm20649_identity(void);
 static void module_icm20649_configure(void);
+static void module_icm20649_transfer(uint8_t reg, uint8_t data);
+static void module_icm20649_read(uint8_t reg, artemis_icm20649_data_t *data);
 
 ///
 ///
@@ -100,14 +102,10 @@ void artemis_icm20649_initialize(void)
 ///
 ///
 ///
-static void module_icm20649_bank(uint8_t bank)
+void artemis_icm20649_read(artemis_icm20649_data_t *accel, artemis_icm20649_data_t *gyro)
 {
-    artemis_stream_t txstream = {0};
-
-    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_BANK_SELECT);
-    artemis_stream_put(&txstream, bank);
-    artemis_spi_send(&module.spi, true, &txstream);
+    module_icm20649_read(ARTEMIS_ICM20649_REG_ACCEL_XOUT_H, accel);
+    module_icm20649_read(ARTEMIS_ICM20649_REG_GYRO_XOUT_H, gyro);
 }
 
 ///
@@ -115,14 +113,9 @@ static void module_icm20649_bank(uint8_t bank)
 ///
 static void module_icm20649_reset(void)
 {
-    artemis_stream_t txstream = {0};
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_0);
 
-    module_icm20649_bank(ARTEMIS_ICM20649_BANK_SELECT_0);
-
-    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_PWR_MGMT_1);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_BANK0_DEVICE_RESET);
-    artemis_spi_send(&module.spi, true, &txstream);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_PWR_MGMT_1, ARTEMIS_ICM20649_BANK0_DEVICE_RESET);
 
     artemis_time_delayms(100);
 }
@@ -136,13 +129,14 @@ static void module_icm20649_identity(void)
     artemis_stream_t txstream = {0};
     artemis_stream_t rxstream = {0};
 
-    module_icm20649_bank(ARTEMIS_ICM20649_BANK_SELECT_0);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_0);
 
     artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_WHO_AM_I | ARTEMIS_SPI_READBIT_MSB);
-    artemis_spi_send(&module.spi, false, &txstream);
-
     artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
+    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_WHO_AM_I | ARTEMIS_SPI_READBIT_MSB);
+    artemis_spi_transfer(&module.spi, false, &txstream, &rxstream);
+
+    artemis_stream_reset(&rxstream);
     artemis_spi_receive(&module.spi, true, &rxstream, 1);
     artemis_stream_get(&rxstream, &identity);
 
@@ -154,53 +148,77 @@ static void module_icm20649_identity(void)
 ///
 static void module_icm20649_configure(void)
 {
-    artemis_stream_t txstream = {0};
-
-    module_icm20649_bank(ARTEMIS_ICM20649_BANK_SELECT_0);
+    // select bank 0
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_0);
 
     // disable I2C interface
-    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_USER_CTRL);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_BANK0_I2C_IF_DIS);
-    artemis_spi_send(&module.spi, true, &txstream);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_USER_CTRL, ARTEMIS_ICM20649_BANK0_I2C_IF_DIS);
 
     // disable temperature sensor and auto select best available clock source
-    artemis_stream_reset(&txstream);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_PWR_MGMT_1);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_BANK0_TEMP_DIS | ARTEMIS_ICM20649_BANK0_CLKSEL);
-    artemis_spi_send(&module.spi, true, &txstream);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_PWR_MGMT_1, ARTEMIS_ICM20649_BANK0_TEMP_DIS | ARTEMIS_ICM20649_BANK0_CLKSEL);
 
     // ensure all accel and gyro axes are enabled
-    artemis_stream_reset(&txstream);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_PWR_MGMT_2);
-    artemis_stream_put(&txstream, 0);
-    artemis_spi_send(&module.spi, true, &txstream);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_PWR_MGMT_2, 0);
 
-    module_icm20649_bank(ARTEMIS_ICM20649_BANK_SELECT_2);
+    // select bank 2
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_2);
 
-    // accel sample rate divider
-    artemis_stream_reset(&txstream);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_ACCEL_SMPLRT_DIV);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_ACCEL_INTERNAL_SMPLRT / 5); // 1125 / (1 + 4) = 225Hz
-    artemis_spi_send(&module.spi, true, &txstream);
+    // accel sample rate divider; 225Hz = 1125 / (1 + 4)
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_ACCEL_SMPLRT_DIV, ARTEMIS_ICM20649_ACCEL_INTERNAL_SMPLRT / 5);
 
     // accel configuration
-    artemis_stream_reset(&txstream);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_ACCEL_CONFIG);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_16 | ARTEMIS_ICM20649_BANK2_ACCEL_FCHOICE);
-    artemis_spi_send(&module.spi, true, &txstream);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_ACCEL_CONFIG, ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_16 | ARTEMIS_ICM20649_BANK2_ACCEL_FCHOICE);
 
-    // gyro sample rate divider
-    artemis_stream_reset(&txstream);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_GYRO_SMPLRT_DIV);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_GYRO_INTERNAL_SMPLRT / 5); // 1100 / (1 + 4) = 220Hz
-    artemis_spi_send(&module.spi, true, &txstream);
+    // gyro sample rate divider; 220Hz = 1100 / (1 + 4)
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_GYRO_SMPLRT_DIV, ARTEMIS_ICM20649_GYRO_INTERNAL_SMPLRT / 5);
 
     // gyro configuration
-    artemis_stream_reset(&txstream);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_GYRO_CONFIG);
-    artemis_stream_put(&txstream, ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_2000 | ARTEMIS_ICM20649_BANK2_GYRO_FCHOICE);
-    artemis_spi_send(&module.spi, true, &txstream);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_GYRO_CONFIG, ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_2000 | ARTEMIS_ICM20649_BANK2_GYRO_FCHOICE);
 
-    module_icm20649_bank(ARTEMIS_ICM20649_BANK_SELECT_0);
+    // select bank 0
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_0);
+}
+
+//
+//
+//
+static void module_icm20649_transfer(uint8_t reg, uint8_t data)
+{
+    artemis_stream_t txstream = {0};
+    artemis_stream_t rxstream = {0};
+
+    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
+    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
+    artemis_stream_put(&txstream, reg);
+    artemis_spi_transfer(&module.spi, false, &txstream, &rxstream);
+
+    artemis_stream_reset(&txstream);
+    artemis_stream_reset(&rxstream);
+    artemis_stream_put(&txstream, data);
+    artemis_spi_transfer(&module.spi, true, &txstream, &rxstream);
+}
+
+///
+///
+///
+static void module_icm20649_read(uint8_t reg, artemis_icm20649_data_t *data)
+{
+    uint8_t hi = 0;
+    uint8_t lo = 0;
+    artemis_stream_t txstream = {0};
+    artemis_stream_t rxstream = {0};
+
+    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
+    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
+    artemis_stream_put(&txstream, reg | ARTEMIS_SPI_READBIT_MSB);
+    artemis_spi_transfer(&module.spi, false, &txstream, &rxstream);
+
+    artemis_stream_reset(&rxstream);
+    artemis_spi_receive(&module.spi, true, &rxstream, ARTEMIS_IMU_AXIS_COUNT * sizeof(int16_t));
+
+    for (size_t i = 0; i < ARTEMIS_IMU_AXIS_COUNT; i++) {
+        artemis_stream_get(&rxstream, &hi);
+        artemis_stream_get(&rxstream, &lo);
+        (*data)[i] = (int16_t)((hi << 8) | lo);
+    }
 }
