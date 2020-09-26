@@ -42,22 +42,26 @@
 #define ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_16  (0x04) // accel full scale select: ±16g
 #define ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_30  (0x06) // accel full scale select: ±30g
 #define ARTEMIS_ICM20649_BANK2_ACCEL_FCHOICE    (0x01) // enable accel DLPF
-#define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_500  (0x00) // gyro full scale select: ±500 dps
-#define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_1000 (0x02) // gyro full scale select: ±1000 dps
-#define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_2000 (0x04) // gyro full scale select: ±2000 dps
-#define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_4000 (0x06) // gyro full scale select: ±4000 dps
+#define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_500  (0x00) // gyro full scale select: ±500dps
+#define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_1000 (0x02) // gyro full scale select: ±1000dps
+#define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_2000 (0x04) // gyro full scale select: ±2000dps
+#define ARTEMIS_ICM20649_BANK2_GYRO_FS_SEL_4000 (0x06) // gyro full scale select: ±4000dps
 #define ARTEMIS_ICM20649_BANK2_GYRO_FCHOICE     (0x01) // enable gyro DLPF
 
 // ICM20649 attributes
 #define ARTEMIS_ICM20649_IDENTITY               (0xE1) // ICM20649 identity
 #define ARTEMIS_ICM20649_SCLK_FREQ              (7000000) // SPI SCLK frequency
 #define ARTEMIS_ICM20649_ACCEL_INTERNAL_SMPLRT  (1125) // accel internal sample rate
+#define ARTEMIS_ICM20649_ACCEL_SENSITIVITY      (2048.0f) // accel sensitivity scale factor for ACCEL_FS_SEL=2 (±16g)
+#define ARTEMIS_ICM20649_ACCEL_Z_1G             (1.0f) // z-axis 1G acceleration
 #define ARTEMIS_ICM20649_GYRO_INTERNAL_SMPLRT   (1100) // gyro internal sample rate
+#define ARTEMIS_ICM20649_GYRO_SENSITIVITY       (16.384f) // gyro sensitivity scale factor for GYRO_FS_SEL=2 (±2000dps)
 
 // application specific
 #define ARTEMIS_ICM20649_SPIBUFFER_LENGTH       (8) // transmit and receive buffer length
 
 typedef uint8_t buffer_t[ARTEMIS_ICM20649_SPIBUFFER_LENGTH];
+typedef int16_t data_t[ARTEMIS_IMU_AXIS_COUNT];
 
 typedef struct s_module_t
 {
@@ -72,7 +76,7 @@ static void module_icm20649_reset(void);
 static void module_icm20649_identity(void);
 static void module_icm20649_configure(void);
 static void module_icm20649_transfer(uint8_t reg, uint8_t data);
-static void module_icm20649_read(uint8_t reg, artemis_icm20649_data_t *data);
+static void module_icm20649_read(uint8_t reg, data_t *data);
 
 ///
 ///
@@ -102,10 +106,31 @@ void artemis_icm20649_initialize(void)
 ///
 ///
 ///
-void artemis_icm20649_read(artemis_icm20649_data_t *accel, artemis_icm20649_data_t *gyro)
+void artemis_icm20649_accel(artemis_icm20649_data_t *accel)
 {
-    module_icm20649_read(ARTEMIS_ICM20649_REG_ACCEL_XOUT_H, accel);
-    module_icm20649_read(ARTEMIS_ICM20649_REG_GYRO_XOUT_H, gyro);
+    data_t data;
+
+    module_icm20649_read(ARTEMIS_ICM20649_REG_ACCEL_XOUT_H, &data);
+
+    for (size_t i = 0; i < ARTEMIS_IMU_AXIS_COUNT; i++) {
+        (*accel)[i] = data[i] / ARTEMIS_ICM20649_ACCEL_SENSITIVITY;
+    }
+
+    (*accel)[ARTEMIS_IMU_AXIS_Z] -= ARTEMIS_ICM20649_ACCEL_Z_1G;
+}
+
+///
+///
+///
+void artemis_icm20649_gyro(artemis_icm20649_data_t *gyro)
+{
+    data_t data;
+
+    module_icm20649_read(ARTEMIS_ICM20649_REG_GYRO_XOUT_H, &data);
+
+    for (size_t i = 0; i < ARTEMIS_IMU_AXIS_COUNT; i++) {
+        (*gyro)[i] = data[i] / ARTEMIS_ICM20649_GYRO_SENSITIVITY;
+    }
 }
 
 ///
@@ -114,7 +139,6 @@ void artemis_icm20649_read(artemis_icm20649_data_t *accel, artemis_icm20649_data
 static void module_icm20649_reset(void)
 {
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_0);
-
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_PWR_MGMT_1, ARTEMIS_ICM20649_BANK0_DEVICE_RESET);
 
     artemis_time_delayms(100);
@@ -152,7 +176,7 @@ static void module_icm20649_configure(void)
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_0);
 
     // disable I2C interface
-    module_icm20649_transfer(ARTEMIS_ICM20649_REG_USER_CTRL, ARTEMIS_ICM20649_BANK0_I2C_IF_DIS);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_USER_CTRL, ARTEMIS_ICM20649_BANK0_DMP_EN | ARTEMIS_ICM20649_BANK0_I2C_IF_DIS);
 
     // disable temperature sensor and auto select best available clock source
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_PWR_MGMT_1, ARTEMIS_ICM20649_BANK0_TEMP_DIS | ARTEMIS_ICM20649_BANK0_CLKSEL);
@@ -201,7 +225,7 @@ static void module_icm20649_transfer(uint8_t reg, uint8_t data)
 ///
 ///
 ///
-static void module_icm20649_read(uint8_t reg, artemis_icm20649_data_t *data)
+static void module_icm20649_read(uint8_t reg, data_t *data)
 {
     uint8_t hi = 0;
     uint8_t lo = 0;

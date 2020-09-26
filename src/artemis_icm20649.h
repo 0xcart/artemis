@@ -11,10 +11,11 @@
 extern "C" {
 #endif
 
-typedef int16_t artemis_icm20649_data_t[ARTEMIS_IMU_AXIS_COUNT];
+typedef float artemis_icm20649_data_t[ARTEMIS_IMU_AXIS_COUNT];
 
 void artemis_icm20649_initialize(void);
-void artemis_icm20649_read(artemis_icm20649_data_t *accel, artemis_icm20649_data_t *gyro);
+void artemis_icm20649_accel(artemis_icm20649_data_t *accel);
+void artemis_icm20649_gyro(artemis_icm20649_data_t *gyro);
 
 #ifdef __cplusplus
 }
