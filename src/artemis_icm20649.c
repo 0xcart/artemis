@@ -176,11 +176,11 @@ static void module_icm20649_configure(void)
     // select bank 0
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_0);
 
-    // disable I2C interface
+    // enable DMP and disable I2C interface
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_USER_CTRL, ARTEMIS_ICM20649_BANK0_DMP_EN | ARTEMIS_ICM20649_BANK0_I2C_IF_DIS);
 
-    // disable temperature sensor and auto select best available clock source
-    module_icm20649_transfer(ARTEMIS_ICM20649_REG_PWR_MGMT_1, ARTEMIS_ICM20649_BANK0_TEMP_DIS | ARTEMIS_ICM20649_BANK0_CLKSEL);
+    // auto select best available clock source
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_PWR_MGMT_1, ARTEMIS_ICM20649_BANK0_CLKSEL);
 
     // ensure all accel and gyro axes are enabled
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_PWR_MGMT_2, 0);
