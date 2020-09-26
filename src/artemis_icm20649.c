@@ -20,7 +20,8 @@
 #define ARTEMIS_ICM20649_REG_GYRO_XOUT_H        (0x33) // high byte of gyro x-axis data
 
 // ICM20649 bank 2 registers
-#define ARTEMIS_ICM20649_REG_ACCEL_SMPLRT_DIV   (0x10) // accel sample rate divider; 1125Hz / (1 + SAMPLE_RATE_DIVIDER[11:0])
+#define ARTEMIS_ICM20649_REG_ACCEL_SMPLRT_DIV1  (0x10) // accel sample rate divider msb[11:8]; 1125Hz / (1 + SAMPLE_RATE_DIVIDER[11:0])
+#define ARTEMIS_ICM20649_REG_ACCEL_SMPLRT_DIV2  (0x11) // accel sample rate divider lsb[ 7:0]; 1125Hz / (1 + SAMPLE_RATE_DIVIDER[11:0])
 #define ARTEMIS_ICM20649_REG_ACCEL_CONFIG       (0x14) // accel configuration
 #define ARTEMIS_ICM20649_REG_GYRO_SMPLRT_DIV    (0x00) // gyro sample rate divider; 1100Hz / (1 + SAMPLE_RATE_DIVIDER[7:0])
 #define ARTEMIS_ICM20649_REG_GYRO_CONFIG        (0x01) // gyro configuration
@@ -188,7 +189,7 @@ static void module_icm20649_configure(void)
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_2);
 
     // accel sample rate divider; 225Hz = 1125 / (1 + 4)
-    module_icm20649_transfer(ARTEMIS_ICM20649_REG_ACCEL_SMPLRT_DIV, ARTEMIS_ICM20649_ACCEL_INTERNAL_SMPLRT / 5);
+    module_icm20649_transfer(ARTEMIS_ICM20649_REG_ACCEL_SMPLRT_DIV2, ARTEMIS_ICM20649_ACCEL_INTERNAL_SMPLRT / 5);
 
     // accel configuration
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_ACCEL_CONFIG, ARTEMIS_ICM20649_BANK2_ACCEL_FS_SEL_16 | ARTEMIS_ICM20649_BANK2_ACCEL_FCHOICE);
