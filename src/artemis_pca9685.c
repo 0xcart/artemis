@@ -50,7 +50,6 @@
 #define ARTEMIS_PCA9685_OSCILLATOR_FREQ  (25703000) // calibrated with an oscilloscope for this specific pca9685 chip
 #define ARTEMIS_PCA9685_STEP_MINIMUM     (0)    // 12-bit resolution (0 to 4095)
 #define ARTEMIS_PCA9685_STEP_MAXIMUM     (4095) // 12-bit resolution (0 to 4095)
-#define ARTEMIS_PCA9685_STEP_FULL        (4096) // signal fully on/off
 
 // application specific
 #define ARTEMIS_PCA9685_I2CBUFFER_LENGTH (8)    // transmit and receive buffer length
@@ -102,32 +101,12 @@ void artemis_pca9685_setpwm(uint8_t pin, uint16_t value, bool invert)
     value = ARTEMIS_MATH_MIN(value, ARTEMIS_PCA9685_STEP_MAXIMUM);
 
     if (invert) {
-        if (ARTEMIS_PCA9685_STEP_MAXIMUM == value) {
-            on = 0;
-            off = ARTEMIS_PCA9685_STEP_FULL;
-        }
-        else if (ARTEMIS_PCA9685_STEP_MINIMUM == value) {
-            on = ARTEMIS_PCA9685_STEP_FULL;
-            off = 0;
-        }
-        else {
-            on = 0;
-            off = ARTEMIS_PCA9685_STEP_MAXIMUM - value;
-        }
+        on = 0;
+        off = ARTEMIS_PCA9685_STEP_MAXIMUM - value;
     }
     else {
-        if (ARTEMIS_PCA9685_STEP_MAXIMUM == value) {
-            on = ARTEMIS_PCA9685_STEP_FULL;
-            off = 0;
-        }
-        else if (ARTEMIS_PCA9685_STEP_MINIMUM == value) {
-            on = 0;
-            off = ARTEMIS_PCA9685_STEP_FULL;
-        }
-        else {
-            on = 0;
-            off = value;
-        }
+        on = 0;
+        off = value;
     }
 
     artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_LENGTH);
