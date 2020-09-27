@@ -92,27 +92,14 @@ void artemis_pca9685_initialize(uint16_t frequency)
 ///
 ///
 ///
-void artemis_pca9685_setpwm(uint8_t pin, uint16_t value, bool invert)
+void artemis_pca9685_setpwm(uint8_t pin, uint16_t off)
 {
-    uint16_t on;
-    uint16_t off;
     artemis_stream_t txstream = {0};
 
-    value = ARTEMIS_MATH_MIN(value, ARTEMIS_PCA9685_STEP_MAXIMUM);
-
-    if (invert) {
-        on = 0;
-        off = ARTEMIS_PCA9685_STEP_MAXIMUM - value;
-    }
-    else {
-        on = 0;
-        off = value;
-    }
+    off = ARTEMIS_MATH_MIN(off, ARTEMIS_PCA9685_STEP_MAXIMUM);
 
     artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_PCA9685_I2CBUFFER_LENGTH);
-    artemis_stream_put(&txstream, ARTEMIS_PCA9685_REG_LED0_ON_L + (pin * 4));
-    artemis_stream_put(&txstream, on);
-    artemis_stream_put(&txstream, on >> 8);
+    artemis_stream_put(&txstream, ARTEMIS_PCA9685_REG_LED0_OFF_L + (pin * 4));
     artemis_stream_put(&txstream, off);
     artemis_stream_put(&txstream, off >> 8);
     artemis_i2c_send(&module.i2c, true, &txstream);

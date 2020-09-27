@@ -29,7 +29,6 @@ void artemis_servo_initialize(void)
         servo->minimum = ARTEMIS_SERVO_PULSE_MINIMUM;
         servo->maximum = ARTEMIS_SERVO_PULSE_MAXIMUM;
         servo->center = ARTEMIS_SERVO_PULSE_CENTER;
-        servo->invert = false;
     }
 }
 
@@ -44,7 +43,7 @@ void artemis_servo_update(const char *name, uint64_t elapsed_us)
 
     for (size_t i = 0; i < ARTEMIS_SERVO_INDEX_COUNT; i++) {
         servo = &module.servos[i];
-        artemis_pca9685_setpwm(i, servo->value, servo->invert);
+        artemis_pca9685_setpwm(i, servo->value);
     }
 }
 

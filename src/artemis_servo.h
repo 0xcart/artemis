@@ -5,7 +5,6 @@
 #ifndef ARTEMIS_SERVO_H
 #define ARTEMIS_SERVO_H
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -40,7 +39,6 @@ typedef struct s_artemis_servo_t
     uint16_t minimum;
     uint16_t maximum;
     uint16_t center;
-    bool invert;
 } artemis_servo_t;
 
 void artemis_servo_initialize(void);

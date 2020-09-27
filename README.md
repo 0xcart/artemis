@@ -8,11 +8,11 @@ While the current configuration supports Segger J-Link, it can be configured to 
 
 The SparkFun Artemis [forum](https://forum.sparkfun.com/viewforum.php?f=167) is highly recommended for information and support.
 
-In addition to providing a starting template to develop, build, load, and debug with Visual Studio Code, this project also serves as a foundation for a quadruped robot inspired by the work of [Martin Triendl](https://www.youtube.com/watch?v=QWxBLGjrkEU). While the full implementation is maintained in a seperate repository, core components are updated in this repository to provide others a starting point (or at minimum, example code). For instance, the code demonstrates how to control servos using the [PCA9685 Servo Driver](doc/hardware/pca9685/adafruit-16-channel-pwm-servo-driver.pdf) over I2C via the AmbiqSuiteSDK HAL `transfer` functions. It also demonstrates how to read data from a [InvenSense ICM-20649](doc/hardware/icm20649/adafruit-icm20649-wide-range-6-dof-imu.pdf) IMU (accel/gyro) over SPI via the same AmbiqSuiteSDK HAL `transfer` functions.
+In addition to providing a starting template to develop, build, load, and debug with Visual Studio Code, this project also serves as a foundation for a quadruped robot inspired by the work of [Martin Triendl](https://www.youtube.com/watch?v=QWxBLGjrkEU). While the full implementation is maintained in a seperate repository, core components are updated in this repository to provide others a starting point (or at minimum, example code). For instance, the code demonstrates how to control servos using the [PCA9685 Servo Driver](doc/hardware/pca9685/adafruit-16-channel-pwm-servo-driver.pdf) over I2C via the AmbiqSuiteSDK HAL `transfer` functions. It also demonstrates how to read data from an [InvenSense ICM-20649](doc/hardware/icm20649/adafruit-icm20649-wide-range-6-dof-imu.pdf) IMU (accel/gyro) over SPI via the same AmbiqSuiteSDK HAL `transfer` functions.
 
 ## Dependencies
 
-The latest version of each tool/extension should be used unless otherwise noted. During installation, if the option is available to add a given tool to the system PATH environment variable, please do so. This is very important for the GNU Arm Embedded Toolchain.
+The latest version of each tool/extension should be used unless otherwise noted. During installation if the option is available to add a given tool to the system PATH environment variable please do so. This is very important for the GNU Arm Embedded Toolchain.
 
 The following tools are required to make use of this repository:
 

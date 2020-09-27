@@ -21,7 +21,6 @@ void artemis_debug_initialize(void)
 ///
 void artemis_debug_assert(const char *expr, const char *func, const char *file, uint32_t line)
 {
-    ARTEMIS_DEBUG_PRINTF("ASSERT FAILED:\n");
-    ARTEMIS_DEBUG_PRINTF("\texpr:\t%s\n\tfunc:\t%s\n\tfile:\t%s\n\tline:\t%u\n", expr, func, file, line);
+    ARTEMIS_DEBUG_PRINTF("ASSERT FAILED:\n\texpr:\t%s\n\tfunc:\t%s\n\tfile:\t%s\n\tline:\t%u\n", expr, func, file, line);
     abort();
 }
