@@ -14,8 +14,8 @@ extern "C" {
 typedef float artemis_icm20649_data_t[ARTEMIS_IMU_AXIS_COUNT];
 
 void artemis_icm20649_initialize(void);
-void artemis_icm20649_accel(artemis_icm20649_data_t *accel);
-void artemis_icm20649_gyro(artemis_icm20649_data_t *gyro);
+void artemis_icm20649_readaccel(artemis_icm20649_data_t *accel);
+void artemis_icm20649_readgyro(artemis_icm20649_data_t *gyro);
 
 #ifdef __cplusplus
 }

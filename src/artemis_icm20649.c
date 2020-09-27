@@ -77,7 +77,7 @@ static void module_icm20649_reset(void);
 static void module_icm20649_identity(void);
 static void module_icm20649_configure(void);
 static void module_icm20649_transfer(uint8_t reg, uint8_t data);
-static void module_icm20649_read(uint8_t reg, data_t *data);
+static void module_icm20649_readsensor(uint8_t reg, data_t *data);
 
 ///
 ///
@@ -107,11 +107,11 @@ void artemis_icm20649_initialize(void)
 ///
 ///
 ///
-void artemis_icm20649_accel(artemis_icm20649_data_t *accel)
+void artemis_icm20649_readaccel(artemis_icm20649_data_t *accel)
 {
     data_t data;
 
-    module_icm20649_read(ARTEMIS_ICM20649_REG_ACCEL_XOUT_H, &data);
+    module_icm20649_readsensor(ARTEMIS_ICM20649_REG_ACCEL_XOUT_H, &data);
 
     for (size_t i = 0; i < ARTEMIS_IMU_AXIS_COUNT; i++) {
         (*accel)[i] = data[i] / ARTEMIS_ICM20649_ACCEL_SENSITIVITY;
@@ -123,11 +123,11 @@ void artemis_icm20649_accel(artemis_icm20649_data_t *accel)
 ///
 ///
 ///
-void artemis_icm20649_gyro(artemis_icm20649_data_t *gyro)
+void artemis_icm20649_readgyro(artemis_icm20649_data_t *gyro)
 {
     data_t data;
 
-    module_icm20649_read(ARTEMIS_ICM20649_REG_GYRO_XOUT_H, &data);
+    module_icm20649_readsensor(ARTEMIS_ICM20649_REG_GYRO_XOUT_H, &data);
 
     for (size_t i = 0; i < ARTEMIS_IMU_AXIS_COUNT; i++) {
         (*gyro)[i] = data[i] / ARTEMIS_ICM20649_GYRO_SENSITIVITY;
@@ -226,7 +226,7 @@ static void module_icm20649_transfer(uint8_t reg, uint8_t data)
 ///
 ///
 ///
-static void module_icm20649_read(uint8_t reg, data_t *data)
+static void module_icm20649_readsensor(uint8_t reg, data_t *data)
 {
     uint8_t hi = 0;
     uint8_t lo = 0;

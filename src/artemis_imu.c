@@ -24,6 +24,6 @@ void artemis_imu_update(const char *name, uint64_t elapsed_us)
 
     ARTEMIS_DEBUG_TASKINFO(name, elapsed_us);
 
-    artemis_icm20649_accel(&accel);
-    artemis_icm20649_gyro(&gyro);
+    artemis_icm20649_readaccel(&accel);
+    artemis_icm20649_readgyro(&gyro);
 }
