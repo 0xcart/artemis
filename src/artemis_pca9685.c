@@ -54,13 +54,13 @@
 // application specific
 #define ARTEMIS_PCA9685_I2CBUFFER_LENGTH (8)    // transmit and receive buffer length
 
-typedef uint8_t buffer_t[ARTEMIS_PCA9685_I2CBUFFER_LENGTH];
+typedef uint8_t module_buffer_t[ARTEMIS_PCA9685_I2CBUFFER_LENGTH];
 
 typedef struct s_module_t
 {
     artemis_i2c_t i2c;
-    buffer_t txbuffer;
-    buffer_t rxbuffer;
+    module_buffer_t txbuffer;
+    module_buffer_t rxbuffer;
 } module_t;
 
 static module_t module;
