@@ -23,8 +23,8 @@ static module_t module;
 ///
 void artemis_watchdog_initialize(void)
 {
-    am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_LFRC_START, 0);
-    am_hal_reset_control(AM_HAL_RESET_CONTROL_STATUSCLEAR, 0);
+    ARTEMIS_DEBUG_HALSTATUS(am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_LFRC_START, 0));
+    ARTEMIS_DEBUG_HALSTATUS(am_hal_reset_control(AM_HAL_RESET_CONTROL_STATUSCLEAR, 0));
 
     NVIC_EnableIRQ(WDT_IRQn);
 

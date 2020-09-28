@@ -50,7 +50,7 @@
 @set BLD_LIBRARY=%BLD_BOARDPATH%/bsp/gcc/bin/libam_bsp.a %BLD_SDKPATH%/mcu/%BLD_MCU%/hal/gcc/bin/libam_hal.a
 @set BLD_DEFINE=-DPART_%BLD_PART% -DAM_PART_%BLD_PART% -DAM_CUSTOM_BDADDR -DAM_PACKAGE_BGA -DAM_DEBUG_PRINTF -DWSF_TRACE_ENABLED
 @set BLD_CCFLAG=-mthumb -mcpu=%BLD_CPU% -mfpu=%BLD_FPU% -mfloat-abi=%BLD_FABI% -ffunction-sections -fdata-sections -std=c99 -Wall -g -O0 %BLD_DEFINE% %BLD_INCLUDE%
-@set BLD_LDFLAG=-mthumb -mcpu=%BLD_CPU% -mfpu=%BLD_FPU% -mfloat-abi=%BLD_FABI% --specs=nosys.specs -nostartfiles -static -Wl,--gc-sections,--entry,Reset_Handler,-Map,%BLD_BINPATH%/%BLD_OUTPUT%_svl.map -Wl,--start-group -lm -lc -lgcc %BLD_LIBRARY% -Wl,--end-group
+@set BLD_LDFLAG=-mthumb -mcpu=%BLD_CPU% -mfpu=%BLD_FPU% -mfloat-abi=%BLD_FABI% -nostartfiles -static -Wl,--gc-sections,--entry,Reset_Handler,-Map,%BLD_BINPATH%/%BLD_OUTPUT%_svl.map -Wl,--start-group -lm -lc -lgcc %BLD_LIBRARY% -Wl,--end-group
 
 @rem Verify the build environment
 %BLD_CC% --version >nul 2>&1

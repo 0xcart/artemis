@@ -23,9 +23,9 @@ typedef struct s_artemis_spi_t
     artemis_iom_t iom;
 } artemis_spi_t;
 
-bool artemis_spi_send(artemis_spi_t *spi, bool stop, artemis_stream_t *txstream);
-bool artemis_spi_receive(artemis_spi_t *spi, bool stop, artemis_stream_t *rxstream, uint32_t rxnumber);
-bool artemis_spi_transfer(artemis_spi_t *spi, bool stop, artemis_stream_t *txstream, artemis_stream_t *rxstream);
+void artemis_spi_send(artemis_spi_t *spi, bool stop, artemis_stream_t *txstream);
+void artemis_spi_receive(artemis_spi_t *spi, bool stop, artemis_stream_t *rxstream, uint32_t rxnumber);
+void artemis_spi_transfer(artemis_spi_t *spi, bool stop, artemis_stream_t *txstream, artemis_stream_t *rxstream);
 
 #ifdef __cplusplus
 }

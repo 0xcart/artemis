@@ -20,8 +20,8 @@ typedef struct s_artemis_i2c_t
     artemis_iom_t iom;
 } artemis_i2c_t;
 
-bool artemis_i2c_send(artemis_i2c_t *i2c, bool stop, artemis_stream_t *txstream);
-bool artemis_i2c_receive(artemis_i2c_t *i2c, bool stop, artemis_stream_t *rxstream, uint32_t rxnumber);
+void artemis_i2c_send(artemis_i2c_t *i2c, bool stop, artemis_stream_t *txstream);
+void artemis_i2c_receive(artemis_i2c_t *i2c, bool stop, artemis_stream_t *rxstream, uint32_t rxnumber);
 
 #ifdef __cplusplus
 }

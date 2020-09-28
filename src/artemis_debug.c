@@ -4,7 +4,6 @@
 
 #include "artemis_debug.h"
 #include <am_bsp.h>
-#include <stdlib.h>
 
 ///
 ///
@@ -21,6 +20,27 @@ void artemis_debug_initialize(void)
 ///
 void artemis_debug_assert(const char *expr, const char *func, const char *file, uint32_t line)
 {
-    ARTEMIS_DEBUG_PRINTF("ASSERT FAILED:\n\texpr:\t%s\n\tfunc:\t%s\n\tfile:\t%s\n\tline:\t%u\n", expr, func, file, line);
-    abort();
+    ARTEMIS_DEBUG_PRINTF("ASSERT FAILED: {\n");
+    ARTEMIS_DEBUG_PRINTF("\texpr:\t%s\n", expr);
+    ARTEMIS_DEBUG_PRINTF("\tfunc:\t%s\n", func);
+    ARTEMIS_DEBUG_PRINTF("\tfile:\t%s\n", file);
+    ARTEMIS_DEBUG_PRINTF("\tline:\t%u\n", line);
+    ARTEMIS_DEBUG_PRINTF("}\n");
+
+    while(1);
+}
+
+///
+///
+///
+void artemis_debug_halerror(uint32_t error, const char *func, const char *file, uint32_t line)
+{
+    ARTEMIS_DEBUG_PRINTF("AM HAL ERROR: {\n");
+    ARTEMIS_DEBUG_PRINTF("\terror:\t%u\n", error);
+    ARTEMIS_DEBUG_PRINTF("\tfunc:\t%s\n", func);
+    ARTEMIS_DEBUG_PRINTF("\tfile:\t%s\n", file);
+    ARTEMIS_DEBUG_PRINTF("\tline:\t%u\n", line);
+    ARTEMIS_DEBUG_PRINTF("}\n");
+
+    while(1);
 }
