@@ -33,9 +33,10 @@ void artemis_debug_assert(const char *expr, const char *func, const char *file, 
 ///
 ///
 ///
-void artemis_debug_halerror(uint32_t error, const char *func, const char *file, uint32_t line)
+void artemis_debug_halerror(const char *hfunc, uint32_t error, const char *func, const char *file, uint32_t line)
 {
     ARTEMIS_DEBUG_PRINTF("AM HAL ERROR: {\n");
+    ARTEMIS_DEBUG_PRINTF("\thfunc:\t%s\n", hfunc);
     ARTEMIS_DEBUG_PRINTF("\terror:\t%u\n", error);
     ARTEMIS_DEBUG_PRINTF("\tfunc:\t%s\n", func);
     ARTEMIS_DEBUG_PRINTF("\tfile:\t%s\n", file);
