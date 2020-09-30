@@ -17,12 +17,10 @@ extern "C" {
 #ifdef NDEBUG
     #define ARTEMIS_DEBUG_ASSERT(expr) ((void)0)
     #define ARTEMIS_DEBUG_PRINTF(...) ((void)0)
-    #define ARTEMIS_DEBUG_TASKINFO(name, elapsed_us) ((void)0)
     #define ARTEMIS_DEBUG_HALSTATUS(func) (func)
 #else
     #define ARTEMIS_DEBUG_ASSERT(expr) (!!(expr) || (artemis_debug_assert(#expr, __FUNCTION__, __FILE__, __LINE__), 0))
     #define ARTEMIS_DEBUG_PRINTF(...) (am_util_stdio_printf(__VA_ARGS__))
-    #define ARTEMIS_DEBUG_TASKINFO(name, elapsed_us) (am_util_stdio_printf("%s:\t\t%llu\n", name, elapsed_us))
 
     #define ARTEMIS_DEBUG_HALSTATUS(func) \
     do { \

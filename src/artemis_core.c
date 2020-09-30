@@ -3,8 +3,8 @@
 ///
 
 #include "artemis_core.h"
-#include "artemis_debug.h"
 #include "artemis_servo.h"
+#include "artemis_task.h"
 #include <stdbool.h>
 #include <stddef.h>
 
@@ -30,7 +30,7 @@ void artemis_core_update(const char *name, uint64_t elapsed_us)
 {
     artemis_servo_t *servo;
 
-    ARTEMIS_DEBUG_TASKINFO(name, elapsed_us);
+    ARTEMIS_TASK_TIME(name, elapsed_us);
 
     for (size_t i = 0; i < ARTEMIS_SERVO_INDEX_COUNT; i++) {
         servo = artemis_servo_get(i);

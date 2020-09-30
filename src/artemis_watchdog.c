@@ -4,6 +4,7 @@
 
 #include "artemis_debug.h"
 #include "artemis_watchdog.h"
+#include "artemis_task.h"
 #include <am_bsp.h>
 
 #define ARTEMIS_WATCHDOG_LFRC_16HZ         (16) // 8-bit counter; 2^8 / 16Hz = 16 second max timeout
@@ -42,7 +43,7 @@ void artemis_watchdog_initialize(void)
 ///
 void artemis_watchdog_restart(const char *name, uint64_t elapsed_us)
 {
-    ARTEMIS_DEBUG_TASKINFO(name, elapsed_us);
+    ARTEMIS_TASK_TIME(name, elapsed_us);
 
     am_hal_wdt_restart();
 }
