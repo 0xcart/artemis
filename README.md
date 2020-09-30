@@ -314,6 +314,16 @@ You should see the following (or similar) printed to the `OUTPUT` tab:
 
 This verifies functions like `am_util_stdio_printf()` are working properly.
 
+It's worth noting there are two debug run configurations `launch` and `attach`. On the left menu bar click the `Run` icon:
+
+![Run](doc/asset/image/run.jpg)
+
+At the top of the `Run` view you will find a drop-down menu that lets you select `launch` or `attach`:
+
+![Configuration](doc/asset/image/configuration.jpg)
+
+Selecting `launch` will restart your application and stop in `main()` (as described above). Selecting `attach` will attach to your currently running application and stop at the instruction currently being executed. After selecting and executing one of these configurations pressing `F5` will subsequently default to that action.
+
 ### Clean
 
 To clean the project, again bring up the build task by pressing `Ctrl + Shift + B` and select `clean`. You should see the following printed to the console:
