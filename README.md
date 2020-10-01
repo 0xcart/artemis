@@ -95,14 +95,14 @@ Update the `compilerPath` value to match your system configuration.
 
 ### Update the launch.json settings in the .vscode folder
 
-Update the `serverpath` value to match your system configuration. Also update the `cpuFrequency`, `swoFrequency`, and `device` values to match your Artemis board. For most SparkFun Artemis boards the default values should be correct.
+Update both `serverpath` values to match your system configuration. Also update the `cpuFrequency`, `swoFrequency`, and `device` values to match your Artemis board. For most SparkFun Artemis boards the default values should be correct.
 
 ```json
 {
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Cortex Debug",
+      "name": "launch",
       "type": "cortex-debug",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -127,6 +127,32 @@ Update the `serverpath` value to match your system configuration. Also update th
       "svdFile": "${workspaceRoot}/AmbiqSuiteSDK/pack/SVD/apollo3.svd",
       "executable": "${workspaceRoot}/bin/output_svl.axf",
       "runToMain": true,
+    },
+    {
+      "name": "attach",
+      "type": "cortex-debug",
+      "request": "attach",
+      "cwd": "${workspaceRoot}",
+      "servertype": "jlink",
+      "serverpath": "C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe",
+      "interface": "swd",
+      "swoConfig": {
+        "enabled": true,
+        "cpuFrequency": 48000000,
+        "swoFrequency": 2000000,
+        "source": "probe",
+        "decoders": [
+          {
+            "type": "console",
+            "label": "ITM",
+            "port": 0,
+            "encoding": "ascii"
+          }
+        ]
+      },
+      "device": "AMA3B1KK-KBR",
+      "svdFile": "${workspaceRoot}/AmbiqSuiteSDK/pack/SVD/apollo3.svd",
+      "executable": "${workspaceRoot}/bin/output_svl.axf",
     }
   ]
 }
@@ -322,7 +348,7 @@ At the top of the `Run` view you will find a drop-down menu that lets you select
 
 ![Configuration](doc/asset/image/configuration.jpg)
 
-Selecting `launch` will restart your application and stop in `main()` (as described above). Selecting `attach` will attach to your currently running application and stop at the instruction currently being executed. After selecting and executing one of these configurations pressing `F5` will subsequently default to that action.
+Selecting `launch` will restart your application and stop in `main()` (as described above). Selecting `attach` will attach to your currently running application and stop at the instruction currently being executed. After selecting and executing one of these configurations pressing `F5` will subsequently default to that configuration.
 
 ### Clean
 
