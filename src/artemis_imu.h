@@ -20,7 +20,7 @@ typedef enum e_artemis_imu_axis_t
 } artemis_imu_axis_t;
 
 void artemis_imu_initialize(void);
-void artemis_imu_update(const char *name, uint64_t elapsed_us);
+void artemis_imu_update(uint64_t elapsed_us);
 
 #ifdef __cplusplus
 }

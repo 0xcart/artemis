@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 void artemis_led_initialize(void);
-void artemis_led_toggle(const char *name, uint64_t elapsed_us);
+void artemis_led_toggle(uint64_t elapsed_us);
 
 #ifdef __cplusplus
 }

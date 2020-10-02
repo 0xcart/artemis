@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 void artemis_core_initialize(void);
-void artemis_core_update(const char *name, uint64_t elapsed_us);
+void artemis_core_update(uint64_t elapsed_us);
 
 #ifdef __cplusplus
 }

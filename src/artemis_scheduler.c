@@ -5,8 +5,16 @@
 #include "artemis_scheduler.h"
 #include "artemis_task.h"
 #include "artemis_time.h"
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <am_util_stdio.h>
+
+#ifdef NTASKTIME
+    #define ARTEMIS_SCHEDULER_TASKTIME(name, elapsed_us) ((void)0)
+#else
+    #define ARTEMIS_SCHEDULER_TASKTIME(name, elapsed_us) (am_util_stdio_printf("%s:\t\t%llu\n", name, elapsed_us))
+#endif
 
 ///
 ///
@@ -39,8 +47,9 @@ void artemis_scheduler_run(void)
             elapsed_us = current_us - task->previous_us;
 
             if (elapsed_us >= ARTEMIS_TIME_HZ_TO_US(task->period_hz)) {
+                ARTEMIS_SCHEDULER_TASKTIME(task->name, elapsed_us);
                 task->previous_us = current_us;
-                task->run(task->name, elapsed_us);
+                task->run(elapsed_us);
             }
         }
     }

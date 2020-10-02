@@ -4,7 +4,6 @@
 
 #include "artemis_pca9685.h"
 #include "artemis_servo.h"
-#include "artemis_task.h"
 #include <stddef.h>
 
 typedef struct s_module_t
@@ -35,11 +34,9 @@ void artemis_servo_initialize(void)
 ///
 ///
 ///
-void artemis_servo_update(const char *name, uint64_t elapsed_us)
+void artemis_servo_update(uint64_t elapsed_us)
 {
     artemis_servo_t *servo;
-
-    ARTEMIS_TASK_TIME(name, elapsed_us);
 
     for (size_t i = 0; i < ARTEMIS_SERVO_INDEX_COUNT; i++) {
         servo = &module.servos[i];

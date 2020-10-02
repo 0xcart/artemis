@@ -42,7 +42,7 @@ typedef struct s_artemis_servo_t
 } artemis_servo_t;
 
 void artemis_servo_initialize(void);
-void artemis_servo_update(const char *name, uint64_t elapsed_us);
+void artemis_servo_update(uint64_t elapsed_us);
 artemis_servo_t *artemis_servo_get(artemis_servo_index_t index);
 
 #ifdef __cplusplus

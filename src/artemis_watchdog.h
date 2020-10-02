@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 void artemis_watchdog_initialize(void);
-void artemis_watchdog_restart(const char *name, uint64_t elapsed_us);
+void artemis_watchdog_restart(uint64_t elapsed_us);
 
 #ifdef __cplusplus
 }
