@@ -239,7 +239,7 @@ static void module_icm20649_readsensor(uint8_t reg, module_data_t *data)
     artemis_spi_transfer(&module.spi, false, &txstream, &rxstream);
 
     artemis_stream_reset(&rxstream);
-    artemis_spi_receive(&module.spi, true, &rxstream, ARTEMIS_IMU_AXIS_COUNT * sizeof(int16_t));
+    artemis_spi_receive(&module.spi, true, &rxstream, sizeof(module_data_t));
 
     for (size_t i = 0; i < ARTEMIS_IMU_AXIS_COUNT; i++) {
         artemis_stream_get(&rxstream, &hi);
