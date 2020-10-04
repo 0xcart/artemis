@@ -5,6 +5,7 @@
 #include "artemis_core.h"
 #include "artemis_imu.h"
 #include "artemis_led.h"
+#include "artemis_rx.h"
 #include "artemis_servo.h"
 #include "artemis_task.h"
 #include "artemis_watchdog.h"
@@ -25,6 +26,7 @@ typedef struct s_module_t
 static module_t module = {
     {
         [ARTEMIS_TASK_ID_IMU] = ARTEMIS_TASK_ENTRY("IMU", artemis_imu_initialize, artemis_imu_update, 200),
+        [ARTEMIS_TASK_ID_RX] = ARTEMIS_TASK_ENTRY("RX", artemis_rx_initialize, artemis_rx_update, 100),
         [ARTEMIS_TASK_ID_CORE] = ARTEMIS_TASK_ENTRY("CORE", artemis_core_initialize, artemis_core_update, 100),
         [ARTEMIS_TASK_ID_SERVO] = ARTEMIS_TASK_ENTRY("SERVO", artemis_servo_initialize, artemis_servo_update, 50),
         [ARTEMIS_TASK_ID_LED] = ARTEMIS_TASK_ENTRY("LED", artemis_led_initialize, artemis_led_toggle, 2),

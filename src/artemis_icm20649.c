@@ -59,9 +59,9 @@
 #define ARTEMIS_ICM20649_GYRO_SENSITIVITY       (16.384f) // gyro sensitivity scale factor for GYRO_FS_SEL=2 (±2000dps)
 
 // application specific
-#define ARTEMIS_ICM20649_SPIBUFFER_LENGTH       (8) // transmit and receive buffer length
+#define ARTEMIS_ICM20649_BUFFER_LENGTH          (8)    // transmit and receive buffer length
 
-typedef uint8_t module_buffer_t[ARTEMIS_ICM20649_SPIBUFFER_LENGTH];
+typedef uint8_t module_buffer_t[ARTEMIS_ICM20649_BUFFER_LENGTH];
 typedef int16_t module_data_t[ARTEMIS_IMU_AXIS_COUNT];
 
 typedef struct s_module_t
@@ -156,8 +156,8 @@ static void module_icm20649_identity(void)
 
     module_icm20649_transfer(ARTEMIS_ICM20649_REG_BANK_SELECT, ARTEMIS_ICM20649_BANK_SELECT_0);
 
-    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
-    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
+    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_BUFFER_LENGTH);
+    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_BUFFER_LENGTH);
     artemis_stream_put(&txstream, ARTEMIS_ICM20649_REG_WHO_AM_I | ARTEMIS_SPI_READBIT_MSB);
     artemis_spi_transfer(&module.spi, false, &txstream, &rxstream);
 
@@ -212,8 +212,8 @@ static void module_icm20649_transfer(uint8_t reg, uint8_t data)
     artemis_stream_t txstream = {0};
     artemis_stream_t rxstream = {0};
 
-    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
-    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
+    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_BUFFER_LENGTH);
+    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_BUFFER_LENGTH);
     artemis_stream_put(&txstream, reg);
     artemis_spi_transfer(&module.spi, false, &txstream, &rxstream);
 
@@ -233,8 +233,8 @@ static void module_icm20649_readsensor(uint8_t reg, module_data_t *data)
     artemis_stream_t txstream = {0};
     artemis_stream_t rxstream = {0};
 
-    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
-    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_SPIBUFFER_LENGTH);
+    artemis_stream_setbuffer(&txstream, module.txbuffer, ARTEMIS_ICM20649_BUFFER_LENGTH);
+    artemis_stream_setbuffer(&rxstream, module.rxbuffer, ARTEMIS_ICM20649_BUFFER_LENGTH);
     artemis_stream_put(&txstream, reg | ARTEMIS_SPI_READBIT_MSB);
     artemis_spi_transfer(&module.spi, false, &txstream, &rxstream);
 
