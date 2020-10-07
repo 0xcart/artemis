@@ -22,9 +22,6 @@ int main(void)
     // initialize time functions
     artemis_time_initialize();
 
-    // enable mcu burst mode
-    artemis_mcu_enableburst();
-
     // initialize the scheduler
     artemis_scheduler_initialize();
 
