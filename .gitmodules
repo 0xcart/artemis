@@ -1,0 +1,3 @@
+[submodule "AmbiqSuiteSDK"]
+	path = AmbiqSuiteSDK
+	url = https://github.com/sparkfun/AmbiqSuiteSDK.git
